@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <configSections>
+        <section name="SqlUnitTesting" type="Microsoft.Data.Tools.Schema.Sql.UnitTesting.Configuration.SqlUnitTestingSection, Microsoft.Data.Tools.Schema.Sql.UnitTesting, Version=11.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    </configSections>
+    <SqlUnitTesting>
+        <DataGeneration ClearDatabase="true" />
+        <ExecutionContext Provider="System.Data.SqlClient" ConnectionString="<%= $connectionString %>" CommandTimeout="0" />
+          <PrivilegedContext Provider="System.Data.SqlClient" ConnectionString="<%= $connectionString %>" CommandTimeout="0" />
+    </SqlUnitTesting>
+</configuration>

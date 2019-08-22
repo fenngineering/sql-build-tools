@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<Project  xmlns="http://schemas.microsoft.com/developer/msbuild/2003" 
+          DefaultTargets="SsisBuild;SsisDeploy">
+  <UsingTask TaskName="DeploymentFileCompilerTask" AssemblyFile="<%= $ssisBuilderDll %>" />
+  <Target Name="SsisBuild" Condition="'<%= $ssisProjectName %>' != ''">
+    <PropertyGroup>
+      <SsisProjPath><%= $ssisProjectPath %></SsisProjPath>
+    </PropertyGroup>
+    <DeploymentFileCompilerTask
+      InputProject="<%= $ssisProjectPath %>"
+      Configuration="Development"
+      ProtectionLevel="DontSaveSensitive"
+	    RootOutputDirectory="<%= $outputPath %>">
+    </DeploymentFileCompilerTask>
+  </Target>
+
+  <UsingTask TaskName="DeployProjectToCatalogTask" AssemblyFile="<%= $ssisBuilderDll %>" />
+  <Target Name="SsisDeploy" Condition="'<%= $ssisProjectName %>' != ''">
+    <PropertyGroup>
+      <ISPac><%= $isPac %></ISPac>
+    </PropertyGroup>
+    <DeployProjectToCatalogTask
+          DeploymentFile="<%= $isPac %>"
+            Instance="<%= $ssisServer %>"
+            Folder="<%= $folderName %>"
+            CreateFolder="true"/>
+          </Target>
+</Project>

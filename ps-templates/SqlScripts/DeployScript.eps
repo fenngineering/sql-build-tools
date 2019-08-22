@@ -1,0 +1,60 @@
+/*
+-----------------------------------------------------------------------------
+
+	Ticket Details                                                            
+	==============
+	Database	:	<%= $databaseName %>
+	Version		:	<%= $version %>
+	Approved	: 
+
+-----------------------------------------------------------------------------
+     
+	Environments
+	============
+	CI			: <%= $config["CI"].Server.ToUpper() %>
+	QA			: <%= $config["QA"].Server.ToUpper() %>
+	Live		: <%= $config[$environment].Server.ToUpper() %>
+
+-----------------------------------------------------------------------------
+
+	Commit Details                                                            
+	=============
+	Last Commit		:	<%= Get-Commit %>
+	Author			:	<%= Get-Author %>
+	Commit Date		:	<%= Get-CommitDate %>
+
+	Latest Comments	:	1) <%= Get-Comments -num 1 %>
+						2) <%= Get-Comments -num 2 %>
+						3) <%= Get-Comments -num 3 %>
+						4) <%= Get-Comments -num 4 %>
+						5) <%= Get-Comments -num 5 %>
+                  
+-----------------------------------------------------------------------------
+
+	General Notes
+	=============
+	See the github.com for more details.
+
+*/
+----------------------------------------------------------------------------- 
+
+DECLARE @UserName SYSNAME ,
+    @DeploymentTime CHAR(18) ,
+    @DeploymentDB SYSNAME ,
+    @CRLF CHAR(2)
+
+SET @CRLF = CHAR(13) + CHAR(10)
+SET @UserName = SUSER_SNAME() + @CRLF
+SET @DeploymentTime = CONVERT(CHAR(16), GETDATE(), 120) + @CRLF
+SET @DeploymentDB = DB_NAME() + @CRLF
+PRINT '***************************************'
+RAISERROR ( 'DEPLOYMENT SERVER: %s%sDEPLOYMENT DB: %sDEPLOYMENT TIME:%sDEPLOYER: %s',
+  10, 1, @@SERVERNAME, @CRLF, @DeploymentDB, @DeploymentTime, @UserName )
+PRINT '***************************************'
+GO
+
+SET XACT_ABORT ON
+SET NOCOUNT ON
+GO
+
+<%= $DeployScript %>

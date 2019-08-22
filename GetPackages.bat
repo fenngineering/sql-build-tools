@@ -1,0 +1,1 @@
+powershell ..\sql-build-tools\ps-scripts\nuget.ps1

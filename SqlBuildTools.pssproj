@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>6CAFC0C6-A428-4d30-A9F9-700E829FEA51</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MyApplication</RootNamespace>
+    <AssemblyName>MyApplication</AssemblyName>
+    <Name>SqlBuildTools</Name>
+    <ProjectHome />
+    <PackageEntryPoint>ps-scripts\build.ps1</PackageEntryPoint>
+    <DotNetVersion>v4.7.2</DotNetVersion>
+    <ProductName>SqlBuildTools</ProductName>
+    <ProductVersion>1.0</ProductVersion>
+    <RequireElevation>True</RequireElevation>
+    <ManifestPath>$(OutDir)\$(ProjectName).psd1</ManifestPath>
+    <Author>Andrew J Fenna</Author>
+    <Guid>006e1762-1530-4fb5-9dcf-9016143478a5</Guid>
+    <ProcessorArchitecture />
+    <PackageType>Console</PackageType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="ps-scripts\ssispublish\" />
+    <Folder Include="ps-scripts\ssisbuild\" />
+    <Folder Include="ps-scripts\zendesk\" />
+    <Folder Include="ps-scripts\ps-tools\" />
+    <Folder Include="ps-scripts\ps-tools\nuget\" />
+    <Folder Include="ps-scripts\semver\" />
+    <Folder Include="ps-scripts\Version\" />
+    <Folder Include="ps-templates\MSBuild\" />
+    <Folder Include="ps-templates\SsisScripts\" />
+    <Folder Include="ps-tests\" />
+    <Folder Include="ps-scripts\" />
+    <Folder Include="ps-scripts\EPS\" />
+    <Folder Include="ps-scripts\aspub\" />
+    <Folder Include="ps-scripts\common\" />
+    <Folder Include="ps-scripts\dacfx\" />
+    <Folder Include="ps-scripts\devenv\" />
+    <Folder Include="ps-scripts\git\" />
+    <Folder Include="ps-scripts\ispub\" />
+    <Folder Include="ps-scripts\msbuild\" />
+    <Folder Include="ps-scripts\vstest\" />
+    <Folder Include="ps-scripts\zip\" />
+    <Folder Include="ps-scripts\process\" />
+    <Folder Include="ps-scripts\nuget\" />
+    <Folder Include="ps-templates\" />
+    <Folder Include="ps-templates\CdcScript\" />
+    <Folder Include="ps-templates\NuSpec\" />
+    <Folder Include="ps-templates\Semver\" />
+    <Folder Include="ps-templates\SqlScripts\" />
+    <Folder Include="ps-templates\SqlUnitTesting\" />
+    <Folder Include="ps-templates\Version\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ps-scripts\extract.ps1" />
+    <Compile Include="ps-scripts\publish-wrapper.ps1" />
+    <Compile Include="ps-scripts\semver.ps1" />
+    <Compile Include="ps-scripts\ssisbuild\ssisbuild.psm1" />
+    <Compile Include="ps-scripts\ssispublish\ssispublish.psm1" />
+    <Compile Include="ps-scripts\zendesk\zendesk.psm1" />
+    <Compile Include="ps-tests\devenv.tests.ps1" />
+    <Compile Include="ps-tests\vstest.tests.ps1" />
+    <Compile Include="ps-tests\zip.tests.ps1" />
+    <Compile Include="ps-tests\process.tests.ps1" />
+    <Compile Include="ps-tests\nuget.tests.ps1" />
+    <Compile Include="ps-tests\msbuild.tests.ps1" />
+    <Compile Include="ps-tests\aspub.tests.ps1" />
+    <Compile Include="ps-tests\common.tests.ps1" />
+    <Compile Include="ps-tests\dacfx.tests.ps1" />
+    <Compile Include="ps-scripts\aspub\aspub.psm1" />
+    <Compile Include="ps-scripts\build.ps1" />
+    <Compile Include="ps-scripts\common\common.psm1" />
+    <Compile Include="ps-scripts\dacfx\dacfx.psm1" />
+    <Compile Include="ps-scripts\devenv\devenv.psm1" />
+    <Compile Include="ps-scripts\EPS\EPS.ps1" />
+    <Compile Include="ps-scripts\EPS\EPS.psd1" />
+    <Compile Include="ps-scripts\EPS\EPS.psm1" />
+    <Compile Include="ps-scripts\git\git.psm1" />
+    <Compile Include="ps-scripts\ispub\ispub.psm1" />
+    <Compile Include="ps-scripts\msbuild\msbuild.psm1" />
+    <Compile Include="ps-scripts\vstest\vstest.psm1" />
+    <Compile Include="ps-scripts\nuget.ps1" />
+    <Compile Include="ps-scripts\nuget\nuget.psm1" />
+    <Compile Include="ps-scripts\package.ps1" />
+    <Compile Include="ps-scripts\process\process.psm1" />
+    <Compile Include="ps-scripts\publish.ps1" />
+    <Compile Include="ps-scripts\semver\semver.psm1" />
+    <Compile Include="ps-scripts\test.ps1" />
+    <Compile Include="ps-scripts\zip\zip.psm1" />
+    <Compile Include="ps-templates\CdcScript\CdcScript.sql" />
+    <Compile Include="ps-templates\NuSpec\nuspec.eps" />
+    <Compile Include="ps-templates\Semver\.semver.eps" />
+    <Compile Include="ps-templates\SqlScripts\CreateIsFolder.eps" />
+    <Compile Include="ps-templates\SqlScripts\DeployScript.eps" />
+    <Compile Include="ps-templates\SqlUnitTesting\Config.eps" />
+    <Compile Include="ps-templates\SqlUnitTesting\TestSettings.eps" />
+    <Compile Include="ps-templates\Version\Version.cs.eps" />
+    <Compile Include="test.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ps-templates\MSBuild\ExcludeProjects.eps" />
+    <Content Include="ps-templates\SqlUnitTesting\RunSettings.eps" />
+    <Content Include="ps-templates\SsisScripts\SSIS.MSBuild.eps" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="Build" />
+</Project>

@@ -1,0 +1,5 @@
+IF NOT EXISTS(SELECT 1 FROM [<%= $config.SSISDatabaseName  %>].[internal].[folders] WHERE [name] = '<%= $ssisFolderName %>')
+BEGIN
+  INSERT INTO [<%= $config.SSISDatabaseName  %>].[internal].[folders]([name], [description], [created_by_sid],[created_by_name],[created_time])
+  VALUES ('<%= $ssisFolderName %>', '', SUSER_SID(SUSER_NAME()), USER_NAME(), GETDATE())
+END

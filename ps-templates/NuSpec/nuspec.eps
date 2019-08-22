@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+ <metadata>
+ <id><%= $config.SolutionName %>.DB</id>
+ <version><%= $version %></version>
+ <authors>DB Team</authors>
+ <description>Package for <%= $config.SolutionName %> Database</description>
+ </metadata>
+ <files>
+<% Get-ChildItem "$(Join-Path $solutionPath 'build')" -Filter "*.dll" | Where-Object {$_.Name -match "^((?!moq|test|xunit).)*$" } | Foreach-Object { %>
+<% $packageFilePath = "$($_.FullName)" %>
+<%= "	<file src='$packageFilePath' target='$($runtimeVersion = [System.Reflection.Assembly]::ReflectionOnlyLoadFrom($packageFilePath).ImageRuntimeVersion; if($runtimeVersion -eq "v2.0.50727") {'lib\net20'} elseif ($runtimeVersion -eq "v4.0.30319") {'lib\net40'} else {'lib'} )'/>" %>
+<% } %>
+<% if ($config.ContainsKey("DbProjects")) { %>
+<% foreach ($dbProject in $config["DbProjects"].GetEnumerator()) { %>
+<% $packageFilePath = "$(Join-Path $solutionPath 'build\')$($dbProject.ProjectName).dacpac" %>
+<%= "	<file src='$packageFilePath' target='dacpacs'/>" %>
+<% } %>
+<% } %>
+<% if ( Test-Path "$(Join-Path $solutionPath "build")" ) { %>
+<% if ($config.ContainsKey("SsisProjects") ) { %>
+<% foreach ($ssisProject in $config["SsisProjects"].GetEnumerator()) { %>
+<% $packageFilePath = "$(Join-Path $solutionPath "build")\$($ssisProject.ProjectName).ispac" %>
+<%= "	<file src='$packageFilePath' target='ispacs'/>" %>
+<% } %>
+<% } %>
+<% } %>
+<% $psTemplates = "$(Join-Path $solutionPath 'build\ps-templates')" %>  
+<% if (Test-Path $psTemplates) { %>
+<% $psTemplatesSrc = "$($psTemplates)\**\*.*" %>
+<%= "	<file src='$psTemplatesSrc' target='ps-templates'/>" %>
+<% } %>
+ </files>
+</package>
