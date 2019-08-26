@@ -16,7 +16,9 @@ if($createRelease -eq $True){
 	Invoke-CreateRelease
 }
 
-New-Package -solutionName $config.SolutionName
+$solutionFilePath = $(Get-File -path $solutionPath -fileName "*.sln")
+
+New-Package -solutionName $solutionFilePath.BaseName
 
 Push-Package -buildPath $(Join-Path $solutionPath "\build")
 

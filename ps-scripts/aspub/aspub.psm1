@@ -51,15 +51,11 @@ function Invoke-ASPublish{
     [cmdletbinding()]
     param(      
         [Parameter(Mandatory=$True)]
-        [string]$solutionName,        
-        [Parameter(Mandatory=$True)]
         [string]$ssasProjectName,
         [Parameter(Mandatory=$True)]
         [string]$SSASVersion        
     )
     process{    
-
-        $projFilePath = $(Get-Item $solutionName)         
 
         Write-Output "Building Analysis Services Cube [$($ssasProjectName)]"
 

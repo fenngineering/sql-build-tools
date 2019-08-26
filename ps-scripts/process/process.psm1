@@ -37,8 +37,8 @@ function Invoke-Process(){
         $pinfo.RedirectStandardOutput = $True
         $p = New-Object System.Diagnostics.Process
         $p.StartInfo = $pinfo
-        $p.Start()
-        $p.WaitForExit()
+        $p.Start() | Out-Null
+        $p.WaitForExit() | Out-Null
 
         if($captureConsoleOut -eq $True) {	
             return $p.StandardOutput.ReadToEnd()

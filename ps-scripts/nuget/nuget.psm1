@@ -408,7 +408,7 @@ function New-Package(){
     )
     process{
 
-        $nuSpec = $(New-Nuspec -solutionName $solutionName)
+        $nuSpec = $(New-NuSpec -solutionName $solutionName)
     
         #Add-Source -pkgSourceName $($config["Nuget"].Name) -pkgSource $($config["Nuget"].Source) | Out-Null
                 
@@ -436,11 +436,11 @@ function New-NuSpec(){
     process{
         Import-Module EPS -Force -DisableNameChecking
             
-        $nuSpecTemplate = "$(Join-Path $toolsPath "ps-templates\NuSpec\nuSpec.eps")"
+        $nuSpecTemplate = "$(Join-Path $toolsPath "ps-templates\NuSpec\nuspec.eps")"
 
         $nuSpec = "$(Join-Path $solutionPath "build\$solutionName.nuspec")"
 
-        $(New-Item $nuSpec -type file -force -value $(Expand-Template -file $nuSpecTemplate -binding @{ config = $config; version = $(Invoke-GetVersion); solutionPath = $solutionPath }))
+        $(New-Item $nuSpec -type file -force -value $(Expand-Template -file $nuSpecTemplate -binding @{ solutionName = $solutionName; config = $config; version = $(Invoke-GetVersion); solutionPath = $solutionPath }))
     }
 }
 
@@ -462,6 +462,8 @@ function Push-Package(){
             $cmdArgs = @("push","`"$($_.FullName)`"","-source $($config["Nuget"].Source)",$($config["Nuget"].ApiKey))
 
 			$processFileName = $(Get-Exe)
+
+			Write-Host "cmdArgs [$($cmdArgs)]"
 
             'Pushing nuget package with the following args:["{0}" {1}]' -f $processFileName, ($cmdArgs -join ' ') | Write-Host 
 				$returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs)

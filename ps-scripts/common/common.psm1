@@ -27,9 +27,6 @@ Write-Verbose "tools folder [$($toolsPath)]"
 Write-Verbose "common here folder [$($here)]"
 Write-Verbose "solution folder [$($solutionPath)]"
 
-#Testing
-#$Env:environment = "Dev"
-
 $toolsConfig = "$(Join-Path $here config.psd1)"
 $toolsBaseConfig = "$(Join-Path $toolsPath ps-config)"
 

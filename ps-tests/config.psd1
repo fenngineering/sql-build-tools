@@ -1,5 +1,4 @@
 @{
-   SolutionName="SqlBuildTools"
    SqlVersion="140"
    SSASVersion="140"
    EnableNuGetPackageRestore=$true
@@ -13,9 +12,9 @@
    );
    Nuget = @(
       @{
-         Source = ""
-         Name=""
-		 ApiKey = ""
+		  Source = "https://www.nuget.org/api/v2"
+		  ApiKey = ""
+		  Name = "Nuget"
       }
    );
    Dev = @(

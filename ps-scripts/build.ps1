@@ -27,9 +27,8 @@ Import-Module common -Force -ArgumentList $environmentOverride, "$(Join-Path $(G
 
 $solutionFilePath = $(Get-File -path $solutionPath -fileName "*.sln")
 
-#$solutionName = "$($config["SolutionName"]).sln"
-
 $buildConfiguration = "$($config[$environment].BuildConfiguration)"
+
 if([string]::IsNullOrEmpty($buildConfiguration))
 {
 	$buildConfiguration = "Release"
@@ -90,22 +89,13 @@ function Invoke-BuildIs{
 
             foreach ($ssisProject in $config["SsisProjects"].GetEnumerator()) {
 
-				#$job = Start-Job -Name SSISBuid -ArgumentList $solutionFilePath, $ssisProject -ScriptBlock {
+				Write-Host "solutionPath [$($solutionPath)]"
 
-			Write-Host "solutionPath [$($solutionPath)]"
-
-
-					if(-not($(Invoke-SsisBuild -solutionFilePath $solutionFilePath.FullName -projectName $ssisProject.ProjectName) -eq "0")) {
+				if(-not($(Invoke-SsisBuild -solutionFilePath $solutionFilePath.FullName -projectName $ssisProject.ProjectName) -eq "0")) {
 					
-						Throw "Failed to Build [$($ssisProject.ProjectName)] Project"
-					}
-					Write-Host "Successfully Built [$($ssisProject.ProjectName)] Project" -foregroundcolor "green"
-
-				#}
-				
-				#Wait-Job -Job $job | Out-Null
-				#Receive-Job -Job $job
-
+					Throw "Failed to Build [$($ssisProject.ProjectName)] Project"
+				}
+				Write-Host "Successfully Built [$($ssisProject.ProjectName)] Project" -foregroundcolor "green"
 			} 
 		}
 

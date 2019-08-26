@@ -323,9 +323,6 @@ function Invoke-PublishAs
     param()
     process
     {
-    
-        $solutionName = "$($config["SolutionName"]).sln"
-
         if ($config.ContainsKey("SsasProjects"))
         {    
 
@@ -333,14 +330,13 @@ function Invoke-PublishAs
 
             foreach ($ssasProject in $config.SsasProjects)
             {
-
                 Invoke-CreateAsDeploymentTargets -ssasProjectName $ssasProject.ProjectName
 
                 Invoke-CreateAsDeploymentOptions -ssasProjectName $ssasProject.ProjectName      				
 				
-                if (-not($(Invoke-ASPublish -solutionName $solutionName -ssasProjectName $ssasProject.ProjectName -sqlVersion $config.SqlVersion) -eq " 0"))
+                if (-not($(Invoke-ASPublish -ssasProjectName $ssasProject.ProjectName -sqlVersion $config.SqlVersion) -eq " 0"))
                 {
-                    Throw  "Failed to deploy [$($solutionName)]"
+                    Throw  "Failed to deploy project [$($ssasProject)]"
                 }                                      
             }
 
