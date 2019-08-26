@@ -29,49 +29,47 @@ function Invoke-SsisPublish{
 
         Write-Host "Publishing project [$($ProjectName)]"
 
-		foreach ($x in [AppDomain]::CurrentDomain.GetAssemblies() ) {
-			Write-Verbose "Assemnbly Loaded [$($x.GetName() )]"
-			$ssisBuildLoaded = $x.GetName().ToString().Contains("SsisBuild.Core")
-			if($ssisBuildLoaded -eq $True) {
-				Write-Verbose "Existing, found [SsisBuild.Core]"
-				break
-			}
+		if($(Confirm-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly "SqlBuildTools.Utils.dll") -ne $true) {
+
+			$ssisBuildPath = $(Get-File -path $(Join-Path $toolsPath "build") -fileName "SqlBuildTools.Utils.dll")
+
+			Write-Host "SSIS Build '$($ssisBuildPath.FullName)'"
+
+			Import-Module $ssisBuildPath.FullName
 		}
-
-		Write-Verbose "SsisBuildLoaded: $($ssisBuildLoaded)"
-		
-		$buildDir = Get-BuildDir
-
-		$packagesDir = Get-PackagesDir
-
-		if( ($ssisBuildLoaded -eq $False) ) { 
-			
-			$folderName = Get-ChildItem -Path $buildDir -Filter "ssis-build.DB*" -Directory | Select-Object -first 1
-
-			Copy-Item -Path $folderName.FullName -Destination $packagesDir -Recurse
-		}
-
-		$ssisBuildPath = $(Get-File -path $packagesDir -fileName "SsisBuild.Core.dll")
-
-		Write-Host "SSIS Build '$($ssisBuildPath.FullName)'"
-
-		Import-Module $ssisBuildPath.FullName
 
 		try
 		{
-			Publish-SsisDeploymentPackage -DeploymentFilePath $DeploymentFilePath -ServerInstance $ServerInstance -Catalog $Catalog -Folder $DeploymentFolder -ProjectName $ProjectName -ProjectPassword "test"
+			$ssisPublisher = New-Object SqlBuildTools.Utils.SSISPublisher
+			$ssisPublisher.DeploymentFilePath =  $DeploymentFilePath 
+			$ssisPublisher.ServerInstance =  $ServerInstance 
+			$ssisPublisher.Catalog =  $Catalog 
+			$ssisPublisher.Folder =  $DeploymentFolder 
+			$ssisPublisher.ProjectName =  $ProjectName 
+			$ssisPublisher.ProjectPassword =  "test"
+			$ssisPublisher.EraseSensitiveInfo = $true
+
+			Write-Host "solutionPath: [$($solutionPath)]"
 			
+			$ssisPublisher.Publish($solutionPath)
+
+			#Publish-SsisDeploymentPackage -DeploymentFilePath $DeploymentFilePath -ServerInstance $ServerInstance -Catalog $Catalog -Folder $DeploymentFolder -ProjectName $ProjectName -ProjectPassword "test"
+
 			return $true
 		}
 		catch {
+			
+			Write-Error "SSIS Build Exception: [$($_.Exception.Message)]"
+			
+			#Write-Host "SSIS Build Stack: [$($_.Exception.StackTrace)]"
+
 			$PSCmdlet.ThrowTerminatingError($PSitem)
-			return $false
+		 	return $false
 		}
 		finally
 		{
-			Remove-Module "SsisBuild.Core"
-		}
-        
+			Remove-Module "SqlBuildTools.Utils"
+		}    
     }
 }
 

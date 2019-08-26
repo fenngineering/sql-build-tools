@@ -13,8 +13,9 @@
    );
    Nuget = @(
       @{
-         Source = "http://nuget.laterooms.io/nuget"
-         ApiKey = "creat10n"
+         Source = ""
+         Name=""
+		 ApiKey = ""
       }
    );
    Dev = @(

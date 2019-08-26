@@ -11,7 +11,6 @@
 param(
 )
 
-
 function New-AppDomain{
     [cmdletbinding()]
     param(
@@ -59,39 +58,29 @@ function New-AppDomain{
 	}
 }
 
-function Load-AssemblyInAppDomain($domain, $assembly)
-{
-	Write-Verbose "Adding assembly [$($assembly)]..."
-
-	#$amsLoaderProxy = [SqlBuildTools.DacLoader.Proxy]$domain.CreateInstanceAndUnwrap([System.Reflection.Assembly]::GetExecutingAssembly().FullName, [SqlBuildTools.DacLoader.Proxy].GetType().FullName);
-
-	$domain.Load($assembly) | Out-Null;
-
-	#$amsLoaderProxy.GetAssembly($assembly);
-}
-
 function Register-DacServices{
     [cmdletbinding()]
         param()
         process{	
 
-			if($(Confirm-DacFxInstalled) -ne $true )
+			#if($(Confirm-DacFxInstalled) -ne $true )
+
+			if($(Confirm-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly "Microsoft.SqlServer.Dac") -eq $false)
 			{
-
+				#TODO: Investigate loading dlls into new appdomain so that when finished the dlls can be unloaded with the new appDomain
+				
 				#[AppDomain]::CurrentDomain.Load("System.Runtime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");	
-
 				#$loader = $(Get-File -path $packagesPath -fileName "SqlBuildTools.DacLoader.dll")
-			
 				##register the loader
 				#Import-Module $loader.FullName -Scope Local
+				#$(New-AppDomain -appBase $dacFxPath)
+
 
 				$dacDomPath = $(Get-File -path "$($toolsPath)\build\" -fileName "Microsoft.SqlServer.TransactSql.ScriptDom.dll")
 				$dacFxExtPath = $(Get-File -path "$($toolsPath)\build\" -fileName "Microsoft.SqlServer.Dac.Extensions.dll") 
 				$dacFxToolsath = $(Get-File -path "$($toolsPath)\build\" -fileName "Microsoft.Data.Tools.Utilities.dll") 
 				$dacFxPath = $(Get-File -path "$($toolsPath)\build\" -fileName "Microsoft.SqlServer.Dac.dll")
 				$dacFxConts = $(Get-File -path "$($toolsPath)\build\" -fileName "SqlBuildTools.Contributors.dll")
-
-				#$(New-AppDomain -appBase $dacFxPath)
 			
 				#Load-AssemblyInAppDomain -domain $script:newDomain -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacDomPath.FullName))
 				#Load-AssemblyInAppDomain -domain $script:newDomain -assembly $dacFxExtPath.FullName
@@ -99,35 +88,14 @@ function Register-DacServices{
 				#Load-AssemblyInAppDomain -domain $script:newDomain -assembly $dacFxPath.FullName
 				#Load-AssemblyInAppDomain -domain $script:newDomain -assembly $dacFxConts.FullName
 
-				Load-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacDomPath.FullName))
-				Load-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxExtPath.FullName))
-				Load-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxToolsath.FullName))
-				Load-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxPath.FullName))
-				Load-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxConts.FullName))
+				Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacDomPath.FullName))
+				Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxExtPath.FullName))
+				Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxToolsath.FullName))
+				Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxPath.FullName))
+				Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxConts.FullName))
 			}
-			return Confirm-DacFxInstalled
+			return $(Confirm-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly "Microsoft.SqlServer.Dac")
         }
-}
-
-function Confirm-DacFxInstalled {
-	[cmdletbinding()]
-		param()
-		process{
-
-			$dacFXLoaded = $false
-
-			foreach ($x in [AppDomain]::CurrentDomain.GetAssemblies() ) {
-				Write-Verbose "Assemnbly Loaded [$($x.GetName() )]"
-				$dacFXLoaded = $x.GetName().ToString().Contains("Microsoft.SqlServer.Dac")
-				if($dacFXLoaded -eq $True) {
-					Write-Verbose "Existing, found [Microsoft.SqlServer.Dac]"
-					break
-				}
-			}
-
-			Write-Verbose "DacLoaded: [$dacFXLoaded]"
-			return $dacFXLoaded
-		}
 }
 
 function Unregister-DacServices{
@@ -139,6 +107,7 @@ function Unregister-DacServices{
 			#Remove-Library -library "Microsoft.SqlServer.Dac.Extensions"
 			#Remove-Library -library "Microsoft.Data.Tools.Utilities"
 			#Remove-Library -library "SqlBuildTools.Contributors"
+			Unregister-Event -SourceIdentifier $script:DacMessageEvent.Name
         }
 }
 
@@ -152,21 +121,41 @@ function Get-DacServices{
         )
         process{
 
-            if($(Register-DacServices)) {
+            if($(Register-DacServices) -eq $True) {
 
 				$connectionString = $(Get-ConnectionString -serverName $serverName -databaseName $databaseName)
 
 				$dacServices = New-Object Microsoft.SqlServer.Dac.DacServices $connectionString
 
-				Register-ObjectEvent -InputObject $dacServices -EventName "Message" -Action { Write-Host $EventArgs.Message.Message } | Out-Null
-				Register-ObjectEvent -InputObject $dacServices -EventName "ProgressChanged" -Action { Write-Host $EventArgs.ProgressChanged.Message } | Out-Null
+				#Register-ObjectEvent -InputObject $dacServices -EventName "Message" -Action { Write-Host $EventArgs.Message.Message} | Out-Null
+
+				$script:DacMessageEvent = Register-ObjectEvent -InputObject $dacServices -EventName "Message" -Action { 
+					$message = $EventArgs.Message.Message
+					$colour = "DarkGray"
+					if ($message -contains "Error SQL")
+					{
+						$colour = "Red"
+					}
+
+					Write-Host $message -ForegroundColor $colour
+				}
+
+				#Register-ObjectEvent -InputObject $dacServices -EventName "ProgressChanged" -Action { Write-Host $EventArgs.ProgressChanged.Message } | Out-Null
 
 				return $dacServices
             }
         }
 }
 
-function Extract-DeployScript{
+function Write-EventToConsole ($evt)
+{
+    Write-Host $Evt.MessageData
+    Write-Host $Evt.Sender
+    Write-Host $Evt.TimeGenerated      
+    Write-Host $Evt.SourceArgs
+}
+
+function Export-DeployScript{
     [cmdletbinding()]
         param(
 		    [Parameter(Mandatory=$True)]
@@ -299,7 +288,7 @@ function Extract-DeployScript{
 		}
 }
 
-function Extract-DropDbScript{
+function Export-DropDbScript{
     [cmdletbinding()]
         param(
 		    [Parameter(Mandatory=$True)]
@@ -345,7 +334,7 @@ function Extract-DropDbScript{
 		}
 }
 
-function Extract-Database{
+function Export-Database{
     [cmdletbinding()]
         param(
             [Parameter(Mandatory=$True)]
@@ -359,7 +348,7 @@ function Extract-Database{
 
 			$extractedDacPac = $(Join-Path $solutionPath "Extracted.dacpac")
 			            
-            if($(Extract-DacPac -sourceServerName $sourceServerName -sourceDatabaseName $sourceDatabaseName -targetDacPac $extractedDacPac) -eq " 0") {
+            if($(Export-DacPac -sourceServerName $sourceServerName -sourceDatabaseName $sourceDatabaseName -targetDacPac $extractedDacPac) -eq " 0") {
 
 				$extractedCdc = (Export-Cdc -dataSource $sourceServerName -sourceDatabaseName $sourceDatabaseName -targetDatabaseName $targetDatabaseName)
 
@@ -373,7 +362,7 @@ function Extract-Database{
         }
 }
 
-function Extract-DacPac{
+function Export-DacPac{
     [cmdletbinding()]
         param(
             [Parameter(Mandatory=$True)]
@@ -651,39 +640,36 @@ function Publish-DacPac{
 						}
                         $sourcePackage.Dispose()
 
-                        return 0
+                        return $True
 
                     } catch [Microsoft.SqlServer.Dac.DacServicesException] {
-
 						Write-Host "Dacpac deployment failed! $($_.Exception.ToString())" -foregroundcolor "red"
-
                         $PSCmdlet.ThrowTerminatingError($PSitem)
-
-                        return 1
+                        return $False
                     } catch {
 						Write-Host "Dacpac deployment failed! $($_.Exception.Message)" -foregroundcolor "red"
 						$PSCmdlet.ThrowTerminatingError($PSitem)
-                        return 1
+                        return $False
 					}
 					finally {
 						Unregister-DacServices				
 					}
                 }
                 else {
-                    return 1
+                    return $False
                 }                
         }
 }
 
-Export-ModuleMember -Function 'Extract-DeployScript'
+Export-ModuleMember -Function 'Export-DeployScript'
 
 Export-ModuleMember -Function 'Export-RollbackScript'
 
 Export-ModuleMember -Function 'Extract-DropDbScript'
 
-Export-ModuleMember -Function 'Extract-Database'
+Export-ModuleMember -Function 'Export-Database'
 
-Export-ModuleMember -Function 'Extract-DacPac'
+Export-ModuleMember -Function 'Export-DacPac'
 
 Export-ModuleMember -Function 'Publish-Database'
 

@@ -852,6 +852,50 @@ function Get-VsWhere{
     }
 }
 
+function Import-AssemblyInAppDomain{
+    [cmdletbinding()]
+    param(
+        [Parameter(Mandatory=$True)]
+        [System.AppDomain]$domain,
+		[Parameter(Mandatory=$True)]
+        [System.Reflection.AssemblyName]$assemblyName
+	)
+    process{
+		Write-Verbose "Adding assembly [$($assembly)]..."
+
+		#$amsLoaderProxy = [SqlBuildTools.DacLoader.Proxy]$domain.CreateInstanceAndUnwrap([System.Reflection.Assembly]::GetExecutingAssembly().FullName, [SqlBuildTools.DacLoader.Proxy].GetType().FullName);
+
+		$domain.Load($assemblyName) | Out-Null;
+
+		#$amsLoaderProxy.GetAssembly($assembly);
+	}
+}
+
+function Confirm-AssemblyInAppDomain {
+    [cmdletbinding()]
+    param(
+        [Parameter(Mandatory=$True)]
+        [System.AppDomain]$domain,
+		[Parameter(Mandatory=$True)]
+        [string]$assembly
+	)
+    process{ 
+
+		$loaded = $False
+
+		foreach ($x in $domain.GetAssemblies() ) {
+				#Write-Host "Assemnbly Loaded [$($x.GetName() )]"
+				$loaded = $x.GetName().ToString().Contains($assembly)
+				if($loaded -eq $True) {
+					#Write-Host "Existing, found [$assembly]"
+					break
+				}
+			}
+
+		return $loaded
+	}
+}
+
 Export-ModuleMember -Function 'New-Folder'
 
 Export-ModuleMember -Function 'Write-Pixel'
@@ -907,6 +951,10 @@ Export-ModuleMember -Function 'Get-RelativePath'
 Export-ModuleMember -Function 'Get-RelativeProjectPath'
 
 Export-ModuleMember -Function 'Invoke-ApplyTemplate'
+
+Export-ModuleMember -Function 'Import-AssemblyInAppDomain'
+
+Export-ModuleMember -Function 'Confirm-AssemblyInAppDomain'
 
 Export-ModuleMember -Variable 'config'
 

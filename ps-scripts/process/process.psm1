@@ -20,7 +20,7 @@ function Invoke-Process(){
         [Parameter(Mandatory=$True)]
         [string[]]$cmdArgs,
         [Parameter(Mandatory=$False)]
-        [string]$solutionPath,
+        [string]$workingDirectory,
         [Parameter(Mandatory=$False)]
         [bool]$captureConsoleOut = $False,
         [Parameter(Mandatory=$False)]
@@ -32,15 +32,15 @@ function Invoke-Process(){
         $pinfo.FileName = $processFilename
         $pinfo.UseShellExecute = $False
         $pinfo.Arguments = $cmdArgs
-        $pinfo.WorkingDirectory = $solutionPath
+        $pinfo.WorkingDirectory = $workingDirectory
         $pinfo.RedirectStandardError = $True
-        $pinfo.RedirectStandardOutput = $captureConsoleOut
+        $pinfo.RedirectStandardOutput = $True
         $p = New-Object System.Diagnostics.Process
         $p.StartInfo = $pinfo
-        $p.Start() | Out-Null
+        $p.Start()
         $p.WaitForExit()
 
-        if($captureConsoleOut -eq $True) {
+        if($captureConsoleOut -eq $True) {	
             return $p.StandardOutput.ReadToEnd()
         }
         else

@@ -101,7 +101,7 @@ function Install-Packages(){
 					if($package -eq $null) {
 						Write-Host "Installing package $($_.id) $($_.Version) From Remote"
 
-						$package = $(Install-Package $($_.id) -Source "https://www.nuget.org/api/v2/" -Destination $pkgPath -Force -RequiredVersion "$($_.Version)" -SkipDependencies -ErrorAction SilentlyContinue)	
+						$package = $(Install-Package $($_.id) -Source $($config["Nuget"].Source) -Destination $pkgPath -Force -RequiredVersion "$($_.Version)" -SkipDependencies -ErrorAction SilentlyContinue)	
 					}
 
                     if($package -ne $null) {
@@ -134,12 +134,15 @@ function Install-Packages(){
 		}
 
 		if($config.EnableNuGetPackageRestore) {
-			$cmdArgs = @("restore", "`"$solutionFilePath`"")
+
+			$cmdArgs = @("restore","`"$($solutionFilePath)`"")
 
 			$processFileName = $(Get-Exe)
 			
-			'Restoring nuget packages with the following args: [{0} {1}]' -f $processFileName, ($cmdArgs -join ' ') | Write-Verbose 
-				$returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs)
+			'Restoring nuget packages with the following args: [{0} {1}]' -f $processFileName, ($cmdArgs -join ' ') | Write-Host
+				$returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs -workingDirectory $solutionPath -captureConsoleOut $True)
+
+			Write-Host "Return Code [$($returnCode)]"
 		}
     }
 }
@@ -209,7 +212,7 @@ function Install-DacServicesNuget(){
 		if(Test-Path $packagesPath) {
 
 			'Installing Microsoft.SqlServer.DacFx.x64 package.' | Write-Host
-			 	Install-Package Microsoft.SqlServer.DacFx.x64 -Source "https://www.nuget.org/api/v2/" -Destination $packagesPath -Force
+			 	Install-Package Microsoft.SqlServer.DacFx.x64 -Source $($config["Nuget"].Source) -Destination $packagesPath -Force
 
 			return $True
 		}
@@ -230,7 +233,7 @@ function Install-ISBuilderNuget(){
 		if(Test-Path $packagesPath) {
 
 			'Installing Microsoft.SqlServer.IntegrationServices.Build package.' | Write-Host
-			 	Install-Package Microsoft.SqlServer.IntegrationServices.Build -Source "https://www.nuget.org/api/v2/" -Destination $packagesPath -Force
+			 	Install-Package Microsoft.SqlServer.IntegrationServices.Build -Source $($config["Nuget"].Source) -Destination $packagesPath -Force
 
 			return $True
 		}
@@ -265,7 +268,7 @@ function Install-DacBuilderNuget(){
 		if(Test-Path $packagesPath) {
 
 			'Installing Microsoft.Data.Tools.Msbuild package.' | Write-Host
-			 	Install-Package Microsoft.Data.Tools.Msbuild -Source "https://www.nuget.org/api/v2/" -Destination $packagesPath -Force
+			 	Install-Package Microsoft.Data.Tools.Msbuild -Source $($config["Nuget"].Source) -Destination $packagesPath -Force
 
 			return $True
 		}
@@ -286,7 +289,7 @@ function Install-VsWhere(){
 		if(Test-Path $packagesPath) {
 
 			'Installing vswhere package.' | Write-Host
-			 	Install-Package vswhere -Source "https://www.nuget.org/api/v2/" -Destination $packagesPath -Force
+			 	Install-Package vswhere -Source $($config["Nuget"].Source) -Destination $packagesPath -Force
 
 			return $True
 		}
@@ -328,7 +331,7 @@ function Install-MsTestNuget(){
 		if(Test-Path $packagesPath) {
 
 			'Installing Microsoft.Data.Tools.UnitTest package.' | Write-Host
-				Install-Package Microsoft.Data.Tools.UnitTest -Source "https://www.nuget.org/api/v2/" -Destination $packagesPath -Force
+				Install-Package Microsoft.Data.Tools.UnitTest -Source $($config["Nuget"].Source) -Destination $packagesPath -Force
 
 			return $True
 		}
@@ -348,9 +351,9 @@ function Install-SsisBuild(){
 		
 		if(Test-Path $packagesPath) {
 
-			#Write-Host 'Installing ssis-build.DB package from ' + $($config["Nuget"].Source) | 
+			'Installing ssis-build.DB package from [{0}]' -f $($config["Nuget"].Source) | Write-Host 
 				
-			return $(Install-Package ssis-build.DB -Source $($config["Nuget"].Source) -Destination $packagesPath -Force)
+				Install-Package ssis-build.DB -Source $($config["Nuget"].Source) -Destination $packagesPath -Force
 		}
 		
 		return $null
@@ -367,7 +370,7 @@ function Add-Source(){
 		[string]$pkgSource
 	)
     process{
-        Remove-Source -pkgSourceName $pkgSourceName -pkgSource $pkgSource
+        #Remove-Source -pkgSourceName $pkgSourceName -pkgSource $pkgSource
 
         $cmdArgs = @("sources","add","-name $pkgSourceName","-source $pkgSource")
 
@@ -407,7 +410,7 @@ function New-Package(){
 
         $nuSpec = $(New-Nuspec -solutionName $solutionName)
     
-        Add-Source -pkgSourceName "LateRooms" -pkgSource $($config["Nuget"].Source) | Out-Null
+        #Add-Source -pkgSourceName $($config["Nuget"].Name) -pkgSource $($config["Nuget"].Source) | Out-Null
                 
         $buildPath = $(Join-Path $solutionPath "build")
         
@@ -449,7 +452,7 @@ function Push-Package(){
     )
     process{
         
-        Add-Source -pkgSourceName "LateRooms" -pkgSource $($config["Nuget"].Source)  | Out-Null
+        #Add-Source -pkgSourceName $($config["Nuget"].Name) -pkgSource $($config["Nuget"].Source)  | Out-Null
 
         Get-ChildItem $buildPath -Filter *.nupkg | 
         Foreach-Object {

@@ -29,47 +29,27 @@ function Invoke-SsisBuild{
 
         Write-Host "Building project [$($projectFilePath)]"
 
-		foreach ($x in [AppDomain]::CurrentDomain.GetAssemblies() ) {
-			Write-Verbose "Assemnbly Loaded [$($x.GetName() )]"
-			$ssisBuildLoaded = $x.GetName().ToString().Contains("SsisBuild.Core")
-			if($ssisBuildLoaded -eq $True) {
-				Write-Verbose "Existing, found [SsisBuild.Core]"
-				break
-			}
+		if($(Confirm-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly "SqlBuildTools.Utils.dll") -ne $true) {
+
+			$ssisBuildPath = $(Get-File -path $(Join-Path $toolsPath "build") -fileName "SqlBuildTools.Utils.dll")
+
+			Write-Host "SSIS Build '$($ssisBuildPath.FullName)'"
+
+			Import-Module $ssisBuildPath.FullName
 		}
-
-		Write-Verbose "SsisBuildLoaded: $($ssisBuildLoaded)"
-
-		$buildDir = Get-BuildDir
-
-		$packagesDir = Get-PackagesDir
-
-		if( ($ssisBuildLoaded -eq $False) ) { 
-
-			Import-Module nuget
-
-			$installed = $(Install-SsisBuild -packagesPath $buildDir) | Select-Object -first 1
-
-			if($installed.Status -eq "Installed")
-			{
-				$folderName = "$($installed.Name).$($installed.Version)"
-
-				Copy-Item -Path "$(Join-Path $buildDir $folderName)" -Destination "$(Join-Path $packagesDir $folderName)" -Recurse
-
-				Remove-Module nuget
-			}
-		}
-
-		$ssisBuildPath = $(Get-File -path $packagesDir -fileName "SsisBuild.Core.dll")
-
-		Write-Host "SSIS Build [$($ssisBuildPath.FullName)]"
-
-		Import-Module $ssisBuildPath.FullName
 
 		try
-		{
-		
-			New-SsisDeploymentPackage -ProtectionLevel "EncryptSensitiveWithPassword" -ProjectPath $projectFilePath -NewPassword "test" -OutputFolder $(Get-BuildDir) -Configuration "Development" -Parameters @{"Project::SourceDBServer" = "."; "Project::SourceDBName" = "SSISDB"}
+		{		
+			$ssisBuilder = New-Object SqlBuildTools.Utils.SSISBuilder 
+			$ssisBuilder.ProjectPath = $projectFilePath 
+			$ssisBuilder.NewPassword = "test" 
+			$ssisBuilder.OutputFolder = $(Get-BuildDir) 
+			$ssisBuilder.Configuration = "Development" 
+			$ssisBuilder.Parameters = @{"Project::SourceDBServer" = "."; "Project::SourceDBName" = "SSISDB"}
+
+			$ssisBuilder.Build($solutionPath)
+
+			#New-SsisDeploymentPackage -ProtectionLevel "EncryptSensitiveWithPassword" -ProjectPath $projectFilePath -NewPassword "test" -OutputFolder $(Get-BuildDir) -Configuration "Development" -Parameters @{"Project::SourceDBServer" = "."; "Project::SourceDBName" = "SSISDB"}
 			return $true
 		}
 		catch {
@@ -78,7 +58,7 @@ function Invoke-SsisBuild{
 		}
 		finally
 		{
-			Remove-Module "SsisBuild.Core"
+			Remove-Module "SqlBuildTools.Utils"
 		}
     }
 }

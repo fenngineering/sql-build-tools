@@ -135,7 +135,7 @@ function Invoke-PublishDb
                                 Invoke-ZipDeletePart -zipfilepath $sourceDacPac -zipPart "/postdeploy.sql" | Out-Null
                     
                                 Remove-Module -name zip
-                                if ($(Publish-DacPac -targetServerName $config["Staging"].Server -sourceDacPac $sourceDacPac -targetDatabaseName $config["Staging"].Database -includeCompositeObjects $false -generateDeployScript $generateDeployScript -dataPath $config["Staging"].Default.DataPath -logPath $config["Staging"].Default.LogPath) -ne 0)
+                                if ($(Publish-DacPac -targetServerName $config["Staging"].Server -sourceDacPac $sourceDacPac -targetDatabaseName $config["Staging"].Database -includeCompositeObjects $false -generateDeployScript $generateDeployScript -dataPath $config["Staging"].Default.DataPath -logPath $config["Staging"].Default.LogPath) -ne $True)
                                 {
                                     Throw "Failed to deploy [$($sourceDacPac)]"
                                 }
@@ -145,7 +145,7 @@ function Invoke-PublishDb
                         else
                         {
 
-                            if ($(Publish-DacPac -targetServerName $config[$environment].Server -sourceDacPac $sourceDacPac -targetDatabaseName $targetDatabaseName -includeCompositeObjects $false -generateDeployScript $generateDeployScript) -ne 0)
+                            if ($(Publish-DacPac -targetServerName $config[$environment].Server -sourceDacPac $sourceDacPac -targetDatabaseName $targetDatabaseName -includeCompositeObjects $false -generateDeployScript $generateDeployScript) -ne $True)
                             {
                                 Throw "Failed to deploy [$($sourceDacPac)]"
                             }
@@ -153,7 +153,7 @@ function Invoke-PublishDb
                     }
                 }
             }
-
+			`
             if ($isProduction)
             {
 
@@ -172,7 +172,7 @@ function Invoke-PublishDb
 
                         $releaseDacPac = "$(Join-Path $solutionPath 'build\')Release.dacpac"
 
-                        Extract-DacPac -sourceServerName $config["Staging"].Server -sourceDatabaseName $config["Staging"].Database -targetDacPac $releaseDacPac
+                        Export-DacPac -sourceServerName $config["Staging"].Server -sourceDatabaseName $config["Staging"].Database -targetDacPac $releaseDacPac
 					
                         $deployTemplate = "$(Join-Path $toolsPath "ps-templates\SqlScripts\DeployScript.eps")"
 					
@@ -183,7 +183,7 @@ function Invoke-PublishDb
 
                 ## 2) producte the deployment script
 
-                $deployScript = $(Extract-DeployScript -targetDatabaseName $targetDatabaseName -sourceDacPac $releaseDacPac -targetDacPac $extractedDacPac -dropObjectsNotInSource $False -dataPath $config[$environment].Default.DataPath -logPath $config[$environment].Default.LogPath)
+                $deployScript = $(Export-DeployScript -targetDatabaseName $targetDatabaseName -sourceDacPac $releaseDacPac -targetDacPac $extractedDacPac -dropObjectsNotInSource $False -dataPath $config[$environment].Default.DataPath -logPath $config[$environment].Default.LogPath)
 
                 New-Item "$(Join-Path $solutionPath "$($targetDatabaseName)_DeployScript.sql")" -type file -force -value $(Expand-Template -file $deployTemplate -binding @{ databaseName = $targetDatabaseName; version = $(Invoke-GetVersion); config = $config; DeployScript = $deployScript; })
 
@@ -192,7 +192,7 @@ function Invoke-PublishDb
                 if ($extractedDacPac)
                 {
                     ## compare staging with the extracted dacpac
-                    $rollbackScript = $(Extract-DeployScript -targetDatabaseName $targetDatabaseName -sourceDacPac $extractedDacPac -targetDacPac $releaseDacPac -dropObjectsNotInSource $True -dataPath $config[$environment].Default.DataPath -logPath $config[$environment].Default.LogPath)
+                    $rollbackScript = $(Export-DeployScript -targetDatabaseName $targetDatabaseName -sourceDacPac $extractedDacPac -targetDacPac $releaseDacPac -dropObjectsNotInSource $True -dataPath $config[$environment].Default.DataPath -logPath $config[$environment].Default.LogPath)
                 }
                 else
                 {     
@@ -614,10 +614,15 @@ switch ($publish)
     default {Invoke-Publish}
 }
 
-Start-Sleep -s 3
-
 #Task 2 Any Post Deployment Tasks
-Invoke-PostDeployment
+Invoke-PostDeployment | Out-Null
+
+#End Session
+Remove-Module -Name common
+$Error.Clear()
+Get-PSSession | Remove-PSSession
+Exit-PSSession
+[System.GC]::Collect()
 
 Write-Host -ForegroundColor Red "                         |\=."
 Write-Host -ForegroundColor Red "                         /  6'"
@@ -632,11 +637,3 @@ Write-Host -ForegroundColor Yellow "   / __ )/ / / /  _/ /   / __ \/ ____/ __ \"
 Write-Host -ForegroundColor Yellow "  / __  / / / // // /   / / / / __/ / /_/ /"
 Write-Host -ForegroundColor Yellow " / /_/ / /_/ // // /___/ /_/ / /___/ _, _/ "
 Write-Host -ForegroundColor Yellow "/_____/\____/___/_____/_____/_____/_/ |_| "
-
-
-#End Session
-Remove-Module -Name common
-$Error.Clear()
-Get-PSSession | Remove-PSSession
-Exit-PSSession
-[System.GC]::Collect()

@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ps-config", "ps-config", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlBuildTools.SqlTests", "SqlBuildTools.SqlTests\SqlBuildTools.SqlTests.csproj", "{83D971D6-5457-4682-8A6C-DDF1C1D7973C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlBuildTools.Utils", "SqlBuildTools.Utils\SqlBuildTools.Utils.csproj", "{843FFA9A-7121-49C9-92DC-27ABD29DE28F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{83D971D6-5457-4682-8A6C-DDF1C1D7973C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83D971D6-5457-4682-8A6C-DDF1C1D7973C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83D971D6-5457-4682-8A6C-DDF1C1D7973C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{843FFA9A-7121-49C9-92DC-27ABD29DE28F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{843FFA9A-7121-49C9-92DC-27ABD29DE28F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{843FFA9A-7121-49C9-92DC-27ABD29DE28F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{843FFA9A-7121-49C9-92DC-27ABD29DE28F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

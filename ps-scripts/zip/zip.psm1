@@ -55,7 +55,7 @@ function Invoke-Unzip{
             return 1
         }
 
-        If(Test-path $destination) {Remove-item $destination -Recurse}
+        If(Test-path $destination) {Remove-item $destination -Recurse }
 
         try{
             Add-Type -assembly "System.Io.Compression.FileSystem"

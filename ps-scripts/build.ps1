@@ -90,11 +90,22 @@ function Invoke-BuildIs{
 
             foreach ($ssisProject in $config["SsisProjects"].GetEnumerator()) {
 
-				if(-not($(Invoke-SsisBuild -solutionFilePath $solutionFilePath.FullName -projectName $ssisProject.ProjectName) -eq "0")) {
+				#$job = Start-Job -Name SSISBuid -ArgumentList $solutionFilePath, $ssisProject -ScriptBlock {
+
+			Write-Host "solutionPath [$($solutionPath)]"
+
+
+					if(-not($(Invoke-SsisBuild -solutionFilePath $solutionFilePath.FullName -projectName $ssisProject.ProjectName) -eq "0")) {
 					
-					Throw "Failed to Build [$($ssisProject.ProjectName)] Project"
-				}
-				Write-Host "Successfully Built [$($ssisProject.ProjectName)] Project" -foregroundcolor "green"
+						Throw "Failed to Build [$($ssisProject.ProjectName)] Project"
+					}
+					Write-Host "Successfully Built [$($ssisProject.ProjectName)] Project" -foregroundcolor "green"
+
+				#}
+				
+				#Wait-Job -Job $job | Out-Null
+				#Receive-Job -Job $job
+
 			} 
 		}
 
@@ -208,7 +219,7 @@ function Invoke-PostBuild{
 					{
 						Write-Verbose "Source $($CopyFile.Source) -> $($CopyFile.Destination)"
 
-						try
+							try
 						{
 							Invoke-CopyFile  -Source $CopyFile.Source -Destination $CopyFile.Destination
 						}
@@ -227,11 +238,11 @@ Invoke-DeleteBuildZip
 
 if($installPackages)
 {
+	Write-Verbose "Installing Packages"
+
 	Import-Module nuget
 
-	#$slnFilePath = Get-Item (Join-Path $solutionPath $solutionName ) 
-
-	Install-Packages -restoreReferences $True -initalisePackages $initalisePackages -solutionFilePath $solutionFilePath | Out-Null
+	Install-Packages -restoreReferences $True -initalisePackages $initalisePackages -solutionFilePath $solutionFilePath
 
 	Remove-Module nuget
 }
@@ -289,4 +300,4 @@ Exit-PSSession
 [System.GC]::Collect()
 
 #Start-Process PowerShell.exe
-#exit
+##exit

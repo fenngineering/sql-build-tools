@@ -39,7 +39,7 @@ function Invoke-Extract{
         process{
             Import-Module dacfx
 
-			if(-not($(Extract-DacPac -sourceServerName $serverName -sourceDatabaseName $databaseName -targetDacPac $extractedDacPac) -eq " 0")) {
+			if(-not($(Export-DacPac -sourceServerName $serverName -sourceDatabaseName $databaseName -targetDacPac $extractedDacPac) -eq " 0")) {
                 Throw "Failed to extract database [$($databaseName)] from server [$($serverName)]"
             }
 
