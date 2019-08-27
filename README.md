@@ -5,9 +5,9 @@ A bunch of powershell scripts to perform DevOps routines like build, publish and
 ## Installation for db project
 
 1) CLONE the sql-build-tools repository to a folder at the sample level as your solution:-
-  > ROOT
-  > |-> Your Solution
-  > |-> Sql-Build-Tools
+  - ROOT
+  - |-> Your Solution
+  - |-> Sql-Build-Tools
 2) Within your solution create folders:-
   a) ps-config
   b) ps-templates (ssis solutions only)
