@@ -6,9 +6,9 @@
 Import-Module "$($PSScriptRoot)\..\ps-scripts\devenv"
 
 InModuleScope devenv {
-	Describe "Get-Exe devenv" {
+	Describe "Get-DevEnvExe devenv" {
 		It 'returns the location of devenv.com' {
-			$(Get-Exe).FullName | Should Exist
+			$(Get-DevEnvExe).FullName | Should Exist
 		}
 	}
 }

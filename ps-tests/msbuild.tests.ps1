@@ -7,9 +7,9 @@
 Import-Module "$($PSScriptRoot)\..\ps-scripts\msbuild"
 
 InModuleScope msbuild {
-	Describe "Get-Exe msbuild" {
+	Describe "Get-MsBuildExe msbuild" {
 		It 'returns the location of msbuild.exe' {
-			$(Get-Exe).FullName | Should Exist
+			$(Get-MsBuildExe).FullName | Should Exist
 		}
 	}
 }

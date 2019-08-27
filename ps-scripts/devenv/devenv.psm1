@@ -15,7 +15,7 @@ param()
 	This will Build the AS project using devenv  
 #>
 
-function Get-Exe{
+function Get-DevEnvExe{
     [cmdletbinding()]
         param()
         process{
@@ -64,7 +64,7 @@ function Invoke-DevEnv{
         $cmdArgs += "/Build release"
         $cmdArgs += "/Project $($projFilePath.FullName)"
 
-        $processFileName = (Get-Exe).FullName
+        $processFileName = (Get-DevEnvExe).FullName
 
         Import-Module process
 

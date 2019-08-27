@@ -7,7 +7,7 @@
 Import-Module "$($PSScriptRoot)\..\ps-scripts\aspub"
 
 InModuleScope aspub {
-	Describe "Get-Exe aspub" {
+	Describe "Get-AsPubExe aspub" {
 		It 'returns the location of Microsoft.AnalysisServices.Deployment.exe' {
 		
 			#Set-Location $PSScriptRoot
@@ -20,7 +20,7 @@ InModuleScope aspub {
 
 			Import-LocalizedData -FileName "config.psd1" -BindingVariable "config" -UICulture "en-GB"			
 
-			$(Get-Exe -SSASVersion $config.SSASVersion) | Should Exist
+			$(Get-AsPubExe -SSASVersion $config.SSASVersion) | Should Exist
 		}
 	}
 }

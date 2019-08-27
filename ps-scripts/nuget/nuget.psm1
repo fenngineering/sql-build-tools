@@ -17,7 +17,7 @@ $pkgSourceName = "LateRooms"
     If nuget is in the tools
     folder then it will be downloaded there.
 #>
-function Get-Exe(){
+function Get-NugetExe(){
     [cmdletbinding()]
     param()
     process{
@@ -137,7 +137,7 @@ function Install-Packages(){
 
 			$cmdArgs = @("restore","`"$($solutionFilePath)`"")
 
-			$processFileName = $(Get-Exe)
+			$processFileName = $(Get-NugetExe)
 			
 			'Restoring nuget packages with the following args: [{0} {1}]' -f $processFileName, ($cmdArgs -join ' ') | Write-Host
 				$returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs -workingDirectory $solutionPath -captureConsoleOut $True)
@@ -374,7 +374,7 @@ function Add-Source(){
 
         $cmdArgs = @("sources","add","-name $pkgSourceName","-source $pkgSource")
 
-		$processFileName = $(Get-Exe)
+		$processFileName = $(Get-NugetExe)
 
         'Running nuget with the following args: [{0} {1}]' -f $processFileName, ($cmdArgs -join ' ') | Write-Verbose 
 			$returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs)
@@ -393,7 +393,7 @@ function Remove-Source(){
     process{     
         $cmdArgs = @("sources","remove","-name $pkgSourceName","-source $pkgSource")
 
-		$processFileName = $(Get-Exe)
+		$processFileName = $(Get-NugetExe)
 
         'Running nuget with the following args: [{0} {1}]' -f $processFileName, ($cmdArgs -join ' ') | Write-Verbose 
 			$returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs)
@@ -416,7 +416,7 @@ function New-Package(){
         
         $cmdArgs = @("pack","`"$nuSpec`"","-OutputDirectory", "`"$buildPath`"")
 
-		$processFileName = $(Get-Exe)
+		$processFileName = $(Get-NugetExe)
 
         'Creating new nuget package with the following args: ["{0}" {1}]' -f $processFileName, ($cmdArgs -join ' ') | Write-Host 
 			$returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs)
@@ -461,7 +461,7 @@ function Push-Package(){
 
             $cmdArgs = @("push","`"$($_.FullName)`"","-source $($config["Nuget"].Source)",$($config["Nuget"].ApiKey))
 
-			$processFileName = $(Get-Exe)
+			$processFileName = $(Get-NugetExe)
 
 			Write-Host "cmdArgs [$($cmdArgs)]"
 

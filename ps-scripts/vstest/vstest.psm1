@@ -12,7 +12,7 @@ param()
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
-function Get-Exe {
+function Get-VsTestExe {
     [cmdletbinding()]
     param()
     process {
@@ -107,7 +107,7 @@ function Invoke-VSTest {
             $cmdArgs += "/Tests:`"$test`""
         }        
 
-        $processFileName = (Get-Exe).FullName
+        $processFileName = (Get-VsTestExe).FullName
 
         Import-Module process
   

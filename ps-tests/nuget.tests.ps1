@@ -7,9 +7,9 @@
 Import-Module "$($PSScriptRoot)\..\ps-scripts\nuget"
 
 InModuleScope nuget {
-	Describe "Get-Exe nuget" {
+	Describe "Get-NugetExe nuget" {
 		It 'returns the location of nuget.exe' {
-			Get-Exe | Should Exist
+			Get-NugetExe | Should Exist
 		}
 	}
 }

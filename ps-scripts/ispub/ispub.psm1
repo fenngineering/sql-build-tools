@@ -10,7 +10,7 @@
 [CmdletBinding()]
 param()
 
-function Get-Exe{
+function Get-IsPubExe{
     [cmdletbinding()]
         param(
             [Parameter(Mandatory=$True)]
@@ -66,7 +66,7 @@ function Invoke-ISPublish{
         $cmdArgs += "/DestinationServer:$($destinationServer)"
         $cmdArgs += "/DestinationPath:/$($databaseName)/$($folderName)/$($projectName)"
 
-        $processFileName = $(Get-Exe -sqlVersion $sqlVersion)
+        $processFileName = $(Get-IsPubExe -sqlVersion $sqlVersion)
 
         Import-Module process
         

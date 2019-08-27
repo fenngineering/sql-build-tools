@@ -9,7 +9,7 @@ $here = Split-Path $MyInvocation.MyCommand.Path
 $env:PSModulePath = $env:PSModulePath + ";$($here)"
 
 Import-Module common -Force -ArgumentList $environmentOverride, "$(Join-Path $(Get-Location) '\build\ps-config')", $True
-
+	
 Import-Module nuget
 
 if($createRelease -eq $True){

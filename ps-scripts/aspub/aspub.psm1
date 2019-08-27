@@ -24,7 +24,7 @@ param()
 .SYNOPSIS  
     This will attempt to resolve the path to the Microsoft.AnalysisServices.Deployment executable
 #>
-function Get-Exe{
+function Get-AsPubExe{
     [cmdletbinding()]
         param(
             [Parameter(Mandatory=$True)]
@@ -65,7 +65,7 @@ function Invoke-ASPublish{
         $cmdArgs += "`"$(Get-BuildDir)\$($ssasProjectName).asdatabase`""
         $cmdArgs += "/s"
 
-        $processFileName = $(Get-Exe -SSASVersion $SSASVersion)
+        $processFileName = $(Get-AsPubExe -SSASVersion $SSASVersion)
 
         Import-Module process
 

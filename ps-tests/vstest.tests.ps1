@@ -7,9 +7,9 @@
 Import-Module "$($PSScriptRoot)\..\ps-scripts\vstest"
 
 InModuleScope vstest {
-	Describe "Get-Exe vstest" {
+	Describe "Get-VsTestExe vstest" {
 		It 'returns the location of vstest.exe' {
-			$(Get-Exe).FullName | Should Exist
+			$(Get-VsTestExe).FullName | Should Exist
 		}
 	}
 }

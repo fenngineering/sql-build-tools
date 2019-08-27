@@ -17,7 +17,7 @@ param()
 	then the highest installed vers
 	ion of msbuild.exe will be returned.
 #>
-function Get-Exe{
+function Get-MsBuildExe{
     [cmdletbinding()]
         param()
         process{
@@ -80,7 +80,7 @@ function Invoke-MSBuild{
         $cmdArgs += "/nologo"
         $cmdArgs += "/target:Clean;Build"
 
-        $processFileName = (Get-Exe).FullName
+        $processFileName = (Get-MsBuildExe).FullName
 
         Import-Module process
 
