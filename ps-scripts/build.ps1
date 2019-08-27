@@ -231,7 +231,9 @@ if($installPackages)
 
 	Import-Module nuget
 
-	Install-Packages -restoreReferences $True -initalisePackages $initalisePackages -solutionFilePath $solutionFilePath
+	if($(Install-Packages -restoreReferences $True -initalisePackages $initalisePackages -solutionFilePath $solutionFilePath) -ne  $True) {
+		Throw  'Failed to install packages for solution [$solutionFilePath]'
+    }
 
 	Remove-Module nuget
 }

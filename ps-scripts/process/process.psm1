@@ -41,12 +41,9 @@ function Invoke-Process(){
         $p.WaitForExit() | Out-Null
 
         if($captureConsoleOut -eq $True) {	
-            return $p.StandardOutput.ReadToEnd()
+            Write-Host $p.StandardOutput.ReadToEnd()
         }
-        else
-        {
-            return $p.ExitCode
-        }
+        return $p.ExitCode
     }
 }
 

@@ -137,15 +137,24 @@ function Install-Packages(){
 
 		if($config.EnableNuGetPackageRestore) {
 
-			$cmdArgs = @("restore","`"$($solutionFilePath)`"")
+			try {
 
-			$processFileName = $(Get-NugetExe)
+				$cmdArgs = @("restore","`"$($solutionFilePath)`"")
+
+				$processFileName = $(Get-NugetExe)
 			
-			'Restoring nuget packages with the following args: [{0} {1}]' -f $processFileName, ($cmdArgs -join ' ') | Write-Host
-				$returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs -workingDirectory $solutionPath -captureConsoleOut $True)
+				'Restoring nuget packages with the following args: [{0} {1}]' -f $processFileName, ($cmdArgs -join ' ') | Write-Host
+					$returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs -workingDirectory $solutionPath -captureConsoleOut $True)
 
-			Write-Host "Return Code [$($returnCode)]"
+				Write-Verbose "Nuget Return Code [$($returnCode)]"
+
+			} catch {
+				$PSCmdlet.ThrowTerminatingError($PSitem)
+				return $False
+			}
 		}
+
+		return $True
     }
 }
 
