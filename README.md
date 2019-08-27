@@ -21,7 +21,7 @@ cd sql-build-tools
 ..\test.ps1
 ```
 ## Setup DB project
-1. CLONE the sql-build-tools repository to a folder at the sample level as your solution:-
+1. CLONE your solution into a folder at the sample level as sql-build-tools:-
    - ROOT
      - YourSolution
      - Sql-Build-Tools
