@@ -58,10 +58,9 @@ function Install-Packages(){
         [string]$solutionFilePath = $null
     )
     process{
-       if($initalisePackages -eq $True) {
-           Initialize-PackagesFolder
-       }
-
+		if($initalisePackages -eq $True) {
+			Initialize-PackagesFolder
+		}
 		if(Test-Path $(Join-Path $solutionPath ".nuget\packages.config")){
 
 			$pkgConfig = Get-Item (Join-Path $solutionPath ".nuget\packages.config")
@@ -72,6 +71,9 @@ function Install-Packages(){
 
 			[xml]$packageFile = gc $pkgConfig
 			$packagesToProcess = $packageFile.packages.package | Where-Object {$packagesToIgnore -notcontains $_.id} 
+
+			
+			Write-Host "Start.......end"
 
 			$packagesToProcess | % {
 
@@ -130,6 +132,8 @@ function Install-Packages(){
             } #| Out-Null
 
 		}
+
+
 
 		if($config.EnableNuGetPackageRestore) {
 
@@ -193,7 +197,6 @@ function Initialize-PackagesFolder{
             'Deleting packages folder [{0}]' -f $packagesFolder | Write-Host
             Remove-Item $packagesFolder -Recurse -Force
         }
-		return $packagesFolder
     }
 }
 

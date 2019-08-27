@@ -81,8 +81,6 @@ else {
     $environment = $environmentOverride
 }
 
-Write-Verbose "Env: [$environment]"
-
 $vsWhereVersion = "[15.0,16.0]"
 if(-not[string]::IsNullOrWhiteSpace($globalConfig.vsWhereVersion))
 {
