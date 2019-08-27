@@ -2,12 +2,12 @@
 
 A bunch of DevOps powershell scripts to build, publish and test SQL Databases & SSIS Packages.
 
-Installation for db project
+## Installation for db project
 
-1) CLONE THE REPO TO A FOLDER AT THE SAME LEVEL AS YOUR SOLUTION:-
+1) CLONE the sql-build-tools repository to a folder at the sample level as your solution:-
   ROOT
   |-> Your Solution
-  |-> Sql Build Tools
+  |-> Sql-Build-Tools
 2) Within your solution create folders:-
   a) ps-config
   b) ps-templates (ssis solutions only)
@@ -19,26 +19,26 @@ Installation for db project
   b) Search & Replace Placeholders:-
     i) $DB-PROJECTNAME
     ii) $DATABASE
-
+    
 Advanced db projects configuration
 
 1) Add multiple db projects
   a) Open .\Your-Solution\ps-config\<SolutionFileName-WithoutExt>.psd1 with text editor
   b) Add a new item to the DbProjects Collection:-
+  ```
   DbProjects = @(
 		@{
 			ProjectName="AGoodDBProject"
 			DatabaseName="AGoodDB"
 			PublishDB=$true
+		}, 
+		@{
+			ProjectName="ANewDBProject"
+			DatabaseName="ANewDB"
+			PublishDB=$true
 		}
-    #, 
-		# @{
-		#	ProjectName="ANewDBProject"
-		#	DatabaseName="ANewDB"
-		#	PublishDB=$true
-		# }
 	);
-    
+ ``` 
  ToDo:-
  1) Add ssis project configuration
  2) Add multiple environments configuration
