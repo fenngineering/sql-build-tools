@@ -25,7 +25,7 @@ Advanced DB projects configuration
 1. Add multiple DB projects
    - Open .\YourSolution\ps-config\<SolutionFileName-WithoutExt>.psd1 with text editor
    - Add a new item to the DbProjects Collection:-
-  ``
+  ```
   DbProjects = @(
 		@{
 			ProjectName="AGoodDBProject"
