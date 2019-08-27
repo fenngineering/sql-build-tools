@@ -1,6 +1,6 @@
 # Sql Build Tools 
 
-A bunch of DevOps powershell scripts to build, publish and test SQL Databases & SSIS Packages.
+A bunch of powershell scripts to perform DevOps routines like build, publish and test MSSQL Stack (SQL, SSIS, SSAS).
 
 ## Installation for db project
 
@@ -12,8 +12,8 @@ A bunch of DevOps powershell scripts to build, publish and test SQL Databases & 
   a) ps-config
   b) ps-templates (ssis solutions only)
 3) Create new config psd1 file:-
-  a) Copy .\samples\ps-config\solution-config.psd1 to .\Your-Solution\ps-config
-  b) Rename .\Your-Solution\ps-config\solution-config.psd1 to .\Your-Solution\ps-config\<SolutionFileName-WithoutExt>.psd1
+  a) Copy [Sample Config](https://github.com/fenngineering/sql-build-tools/tree/master/Samples/ps-config/sample.psd1/) to .\YourSolution\ps-config
+  b) Rename .\Your-Solution\ps-config\sample.psd1 to .\Your-Solution\ps-config\<SolutionFileName-WithoutExt>.psd1
 4) Update new config psd1 file:-
   a) Open .\Your-Solution\ps-config\<SolutionFileName-WithoutExt>.psd1 with a text editor
   b) Search & Replace Placeholders:-
@@ -25,7 +25,7 @@ Advanced db projects configuration
 1) Add multiple db projects
   a) Open .\Your-Solution\ps-config\<SolutionFileName-WithoutExt>.psd1 with text editor
   b) Add a new item to the DbProjects Collection:-
-  ```
+  ``
   DbProjects = @(
 		@{
 			ProjectName="AGoodDBProject"
