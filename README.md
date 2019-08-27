@@ -2,7 +2,7 @@
 
 A bunch of powershell scripts to perform DevOps routines like build, publish and test MSSQL Stack (SQLDB, SSIS, SSAS).
 
-## Installation for 
+## Installation 
 1. Open powershell.
 2. Use git tools to clone the sql-build-tools repository to a folder.
 ```
