@@ -9,8 +9,8 @@ A bunch of powershell scripts to perform DevOps routines like build, publish and
 		- Your Solution
 		- Sql-Build-Tools
 2) Within your solution create folders:-
-  a) ps-config
-  b) ps-templates (ssis solutions only)
+   - ps-config
+   - ps-templates (ssis solutions only)
 3) Create new config psd1 file:-
   a) Copy [Sample Config](Samples/ps-config/sample.psd1/) to .\YourSolution\ps-config
   b) Rename .\Your-Solution\ps-config\sample.psd1 to .\Your-Solution\ps-config\<SolutionFileName-WithoutExt>.psd1
