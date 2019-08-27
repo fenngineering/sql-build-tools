@@ -68,7 +68,7 @@ function Invoke-BuildDb{
 
 		Import-Module msbuild
 
-        if(-not($(Invoke-MSBuild -solutionFilePath $solutionFilePath.FullName -buildConfig $buildConfiguration) -eq "0")) {
+        if($(Invoke-MSBuild -solutionFilePath $solutionFilePath.FullName -buildConfig $buildConfiguration) -ne $True) {
             Throw  'Failed to build solution [$solutionFilePath]'
         }
 

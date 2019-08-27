@@ -68,28 +68,37 @@ function Invoke-MSBuild{
 
 		## VS 2017 create ignore file for unsupported projects
 
-		Invoke-CreateExcludeProjectsFile $solutionFilePath
+		try {
+
+			Invoke-CreateExcludeProjectsFile $solutionFilePath
         
-        Write-Host "Building solution [$($solutionFilePath)]"
+			Write-Host "Building solution [$($solutionFilePath)]"
 
-        $cmdArgs = @()
-        $cmdArgs += "`"$($solutionFilePath)`""
-        $cmdArgs += "/p:Configuration=$($buildConfig)"
-        $cmdArgs += "/p:OutputPath=`"$(Get-BuildDir)`""
-        $cmdArgs += "/verbosity:quiet"
-        $cmdArgs += "/nologo"
-        $cmdArgs += "/target:Clean;Build"
+			$cmdArgs = @()
+			$cmdArgs += "`"$($solutionFilePath)`""
+			$cmdArgs += "/p:Configuration=$($buildConfig)"
+			$cmdArgs += "/p:OutputPath=`"$(Get-BuildDir)`""
+			$cmdArgs += "/verbosity:quiet"
+			$cmdArgs += "/nologo"
+			$cmdArgs += "/target:Clean;Build"
 
-        $processFileName = (Get-MsBuildExe).FullName
+			$processFileName = (Get-MsBuildExe).FullName
 
-        Import-Module process
+			Import-Module process
 
-        'Running msbuild with the following args: [{0} {1}]' -f $processFileName, ($cmdArgs -join ' ') | Write-Host 
-           $returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs)
+			'Running msbuild with the following args: [{0} {1}]' -f $processFileName, ($cmdArgs -join ' ') | Write-Host 
+			   $returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs)
 
-		Invoke-RemoveExcludeProjectsFile $solutionFilePath
+			Write-Verbose "MsBuild Return Code [$($returnCode)]"
 
-        return $returnCode
+			Invoke-RemoveExcludeProjectsFile $solutionFilePath
+
+		} catch {
+			$PSCmdlet.ThrowTerminatingError($PSitem)
+			return $False
+		}
+
+        return $True
     }
 }
 
