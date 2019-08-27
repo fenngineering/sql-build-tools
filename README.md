@@ -12,9 +12,13 @@ git clone https://github.com/fenngineering/sql-build-tools.git
 ```
 cd sql-build-tools
 ```
-4. Build the tools.
+4. Build the tools. (Might need to run it twice)
 ```
 .\ps-scripts\build.ps1
+```
+5. Test the tools.
+```
+..\test.ps1
 ```
 ## Setup DB project
 1. CLONE the sql-build-tools repository to a folder at the sample level as your solution:-
