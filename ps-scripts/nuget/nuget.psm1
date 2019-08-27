@@ -72,9 +72,6 @@ function Install-Packages(){
 			[xml]$packageFile = gc $pkgConfig
 			$packagesToProcess = $packageFile.packages.package | Where-Object {$packagesToIgnore -notcontains $_.id} 
 
-			
-			Write-Host "Start.......end"
-
 			$packagesToProcess | % {
 
 				if(($packagesToProcess -ne $null ) -and ($_.id -eq $packageName -or $packageName -eq ""))
@@ -129,7 +126,7 @@ function Install-Packages(){
                     }
 				}
 
-            } #| Out-Null
+            } | Out-Null
 
 		}
 
@@ -141,12 +138,16 @@ function Install-Packages(){
 
 				$cmdArgs = @("restore","`"$($solutionFilePath)`"")
 
-				$processFileName = $(Get-NugetExe)
+				$processFileName = $(Get-NugetExe) | Out-Null
+
+                # $processFileName | ForEach-Object {
+                #     $_ | Select-Object -Property * 
+                # }
 			
 				'Restoring nuget packages with the following args: [{0} {1}]' -f $processFileName, ($cmdArgs -join ' ') | Write-Host
 					$returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs -workingDirectory $solutionPath -captureConsoleOut $True)
 
-				Write-Verbose "Nuget Return Code [$($returnCode)]"
+				Write-Host "Nuget Return Code [$($returnCode)]"
 
 			} catch {
 				$PSCmdlet.ThrowTerminatingError($PSitem)

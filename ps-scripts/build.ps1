@@ -229,9 +229,13 @@ if($installPackages)
 {
 	Write-Verbose "Installing Packages"
 
-	Import-Module nuget
+    Import-Module nuget
+    
+    $output = $(Install-Packages -restoreReferences $True -initalisePackages $initalisePackages -solutionFilePath $solutionFilePath)
 
-	if($(Install-Packages -restoreReferences $True -initalisePackages $initalisePackages -solutionFilePath $solutionFilePath) -ne  $True) {
+    Write-Host "Output [$output]"
+
+	if(($output) -ne $True) {
 		Throw  'Failed to install packages for solution [$solutionFilePath]'
     }
 
