@@ -9,8 +9,7 @@
 #>
 
 [CmdletBinding()]
-
-$pkgSourceName = "LateRooms"
+param()
 
 <#
 .SYNOPSIS
@@ -67,7 +66,7 @@ function Install-Packages(){
 
 			$pkgConfig = Get-Item (Join-Path $solutionPath ".nuget\packages.config")
             
-			$pkgPath = New-Item -Force -ItemType directory -Path $(Get-PackagesDir)
+			$pkgPath = New-Item -Force -ItemType directory -Path $(Get-PackagesDir) | Out-Null
 
 			$packagesToIgnore = @()
 
@@ -126,7 +125,6 @@ function Install-Packages(){
                         Write-Warning "Installing package $($_.id) $($_.Version) Failed, please investigate."
 
                     }
-                    
 				}
 
             } #| Out-Null

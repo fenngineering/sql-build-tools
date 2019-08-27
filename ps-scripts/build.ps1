@@ -130,9 +130,8 @@ function Invoke-DeleteBuildZip{
 
         if(Test-Path $(Join-Path $solutionPath "build.zip")){
             Remove-Item $(Join-Path $solutionPath "build.zip")
+			Write-Host "Successfully deleted build.zip" -foregroundcolor "green"
         }
-
-        Write-Host "Successfully deleted build.zip" -foregroundcolor "green"
     }
 }
 
