@@ -69,10 +69,10 @@ function Install-Packages(){
 
 			$packagesToIgnore = @()
 
-			[xml]$packageFile = gc $pkgConfig
+			[xml]$packageFile = Get-Content $pkgConfig
 			$packagesToProcess = $packageFile.packages.package | Where-Object {$packagesToIgnore -notcontains $_.id} 
 
-			$packagesToProcess | % {
+			$packagesToProcess | ForEach-Object {
 
 				if(($packagesToProcess -ne $null ) -and ($_.id -eq $packageName -or $packageName -eq ""))
 				{
@@ -130,15 +130,13 @@ function Install-Packages(){
 
 		}
 
-
-
 		if($config.EnableNuGetPackageRestore) {
 
 			try {
 
 				$cmdArgs = @("restore","`"$($solutionFilePath)`"")
 
-				$processFileName = $(Get-NugetExe) | Out-Null
+				$processFileName = $(Get-NugetExe)
 
                 # $processFileName | ForEach-Object {
                 #     $_ | Select-Object -Property * 
