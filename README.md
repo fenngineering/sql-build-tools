@@ -256,8 +256,10 @@ Total Failed Tests 0
  - [x] Build\Publish\Test your solutuion 
  - [x] Advanced DB projects configuration
  - [x] Build\Publish\Test a DB project 
- - [ ] Add sample DB project 
+ - [x] Add sample DB project 
  - [ ] Add SSIS project configuration
  - [ ] Advanced SSIS projects configuration
+ - [ ] Build\Publish\Test a SSIS project 
  - [ ] Add sample SSIS project
+ - [ ] Build\Publish\Test the Solution
  - [ ] Other commands - Nuget\Package adding The Nuget config section to your config
