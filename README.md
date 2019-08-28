@@ -190,6 +190,23 @@ Updating database (Complete)
 /_____/\____/___/_____/_____/_____/_/ |_|
 ```
  ## Test a DB Solution
+ > Testing can only occur on one configured database connection. This is configiured in the Testing collection of the Environment collection:-
+ ```
+ Dev = @(
+		@{
+			IncludeCompositeObjects=$false
+			Server="."
+			Testing = @(
+				@{
+					Database="$DATABASE"
+					UseEnvironmental = 0
+					RunTimeOut = 0
+					TestTimeOut = 0
+				}
+			)
+		}
+	); 
+ ```
 1. Open powershell.
 2. Change directory the solution folder.
 ```
@@ -232,23 +249,6 @@ Total Failed Tests 0
  / /_/ / /_/ // // /___/ /_/ / /___/ _, _/
 /_____/\____/___/_____/_____/_____/_/ |_|
 ``` 
- > Testing can only occur on one configured database connection. This is configiured in the Testing collection of the Environment collection:-
- ```
- Dev = @(
-		@{
-			IncludeCompositeObjects=$false
-			Server="."
-			Testing = @(
-				@{
-					Database="$DATABASE"
-					UseEnvironmental = 0
-					RunTimeOut = 0
-					TestTimeOut = 0
-				}
-			)
-		}
-	); 
- ```
  ## Setup your solution, with SSIS project
 
  To add 
