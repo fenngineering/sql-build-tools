@@ -8,7 +8,7 @@ A bunch of powershell scripts to perform DevOps routines like build, publish and
 ```
 git clone https://github.com/fenngineering/sql-build-tools.git
 ```
-3. Change directory to this folder.
+3. Change directory the tools folder.
 ```
 cd sql-build-tools
 ```
@@ -20,7 +20,7 @@ cd sql-build-tools
 ```
 ..\test.ps1
 ```
-## Setup your solution, with DB project 
+## Setup your solution, with a DB project 
 1. CLONE your DB solution into a folder at the sampe level as sql-build-tools:-
    - ROOT
      - YourSolution
@@ -40,7 +40,7 @@ cd sql-build-tools
 ## Advanced DB projects configuration
 
 ### Multiple Database Projects
-> The tools are capable of publishing dacpacs from muliple database database projects in the solution into seperate databases. Also the tools are capable of publishing dacpas from muliple database database projects in the solution into a single database in the given order. This can be useful when refactoring objects out of one database project into multiple projects. When there is a set dependency deployment order. A good example of this would be refactoring system CDC objects from the **main** database; you want the solution to build and recognise the CDC systems objects but you **do not** want them to the be published as they are system generared.     
+> The tools are capable of publishing dacpacs from muliple database projects within the solution into seperate databases. Also the tools are capable of publishing dacpas from muliple database database projects within the solution into a single database in a given order. This can be useful when refactoring objects out of one database project into multiple projects. When there is a set dependency deployment order. A good example of this would be refactoring system CDC objects from the **main** database; you want the solution to build and recognise the CDC systems objects but you **do not** want them to the be published as they are system generared.     
 > Another example would be when you want to reuse objects from one database project into another, instead of having multiple defined objects in two database projects, move the dupliate objects into a new database project, then reference the 'global' database project in both database projects.
 
 1. Add multiple DB projects
@@ -82,9 +82,9 @@ cd sql-build-tools
 		@{
 			IncludeCompositeObjects=$false
 			Server="DEV-SERVER"
-			Database="AGoodDB"
 			Testing = @(
 				@{
+					Database="AGoodDB"
 					UseEnvironmental = 0
 					RunTimeOut = 0
 					TestTimeOut = 0
@@ -96,9 +96,9 @@ cd sql-build-tools
 		@{
 			IncludeCompositeObjects=$false
 			Server="QA-SERVER"
-			Database="AGoodDB"
 			Testing = @(
 				@{
+					Database="AGoodDB"
 					UseEnvironmental = 0
 					RunTimeOut = 0
 					TestTimeOut = 0
@@ -108,9 +108,40 @@ cd sql-build-tools
 	);
  ```
  ## Build a DB Solution
- ```
- 
- ```
+1. Change directory the solution folder.
+```
+cd SampleDBSolution
+```
+2. Ensuring the tools are in the same root folder run the below:-
+
+```
+..\sql-build-tools\ps-scripts\build.ps1 -build "DB"
+```
+This should produce the below:-
+```
+Building Release configuration to environment dev...
+Successfully deleted build.zip
+Deleting packages folder [C:\dbgit\fenngineering\SampleDBSolution\packages]
+Building solution [C:\dbgit\fenngineering\SampleDBSolution\SampleDBSolution.sln]
+Installing vswhere package.
+Running msbuild with the following args: [C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe "C:\dbgit\fenngineering\SampleDBSolution\SampleDBSolution.sln" /p:Configuration=Release /p:OutputPath="C:\dbgit\fenngineering\SampleDBSolution\build" /verbosity:quiet /nologo /target:Clean;Build]
+Successfully Built [SampleDBSolution.sln] Solution
+Created pre-release 0.130.1-pre-release
+Successfully created build.zip
+                         |\=.
+                         /  6'
+                 .--.    \  .-'
+                /_   \   /  (_()
+                  )   | / ;--'
+                 /   / /   (
+                (    "    _)_
+                 -==-'""" "
+    ____  __  ________    ____  __________
+   / __ )/ / / /  _/ /   / __ \/ ____/ __ \
+  / __  / / / // // /   / / / / __/ / /_/ /
+ / /_/ / /_/ // // /___/ /_/ / /___/ _, _/
+/_____/\____/___/_____/_____/_____/_/ |_|
+```
  ## Publish a DB Solution
 
  ## Test a DB Solution
