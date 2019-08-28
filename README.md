@@ -108,17 +108,19 @@ cd sql-build-tools
 	);
  ```
  ## Build a DB Solution
-1. Change directory the solution folder.
+1. Open powershell.
+2. Change directory the solution folder.
 ```
 cd SampleDBSolution
 ```
-2. Ensuring the tools are in the same root folder run the below:-
+3. Ensuring the tools are in the same root folder run the below:-
 
 ```
 ..\sql-build-tools\ps-scripts\build.ps1 -build "DB"
 ```
 This should produce the below:-
 ```
+PS C:\dbgit\fenngineering\SampleDBSolution> ..\sql-build-tools\ps-scripts\build.ps1 -build "DB"
 Building Release configuration to environment dev...
 Successfully deleted build.zip
 Deleting packages folder [C:\dbgit\fenngineering\SampleDBSolution\packages]
@@ -143,8 +145,93 @@ Successfully created build.zip
 /_____/\____/___/_____/_____/_____/_/ |_|
 ```
  ## Publish a DB Solution
+1. Open powershell.
+2. Change directory the solution folder.
+```
+cd SampleDBSolution
+```
+3. Ensuring the tools are in the same root folder run the below:-
 
+```
+..\sql-build-tools\ps-scripts\publish.ps1 -publish "DB"
+```
+This should produce the below:-
+```
+PS C:\dbgit\fenngineering\SampleDBSolution> ..\sql-build-tools\ps-scripts\publish.ps1 -publish "DB"
+Publishing to environment dev...
+Is this is a production environment? [False]
+
+Setting Command Variables...
+
+environment
+
+Starting dacpac deployment...
+Initializing deployment (Start)
+The following SqlCmd variables are not defined in the target scripts: environment.
+Initializing deployment (Complete)
+Analyzing deployment plan (Start)
+Analyzing deployment plan (Complete)
+Updating database (Start)
+Creating SampleDB...
+Update complete.
+Updating database (Complete)
+                         |\=.
+                         /  6'
+                 .--.    \  .-'
+                /_   \   /  (_()
+                  )   | / ;--'
+                 /   / /   (
+                (    "    _)_
+                 -==-'""" "
+    ____  __  ________    ____  __________
+   / __ )/ / / /  _/ /   / __ \/ ____/ __ \
+  / __  / / / // // /   / / / / __/ / /_/ /
+ / /_/ / /_/ // // /___/ /_/ / /___/ _, _/
+/_____/\____/___/_____/_____/_____/_/ |_|
+```
  ## Test a DB Solution
+1. Open powershell.
+2. Change directory the solution folder.
+```
+cd SampleDBSolution
+```
+3. Ensuring the tools are in the same root folder run the below:-
+
+```
+..\sql-build-tools\ps-scripts\test.ps1
+```
+This should produce the below:-
+```
+PS C:\dbgit\fenngineering\SampleDBSolution> ..\sql-build-tools\ps-scripts\test.ps1
+Testing against environment dev...
+Running vstest with the following args: [vstest.console.exe "C:\dbgit\fenngineering\SampleDBSolution\build\SampleDB.SqlTests.dll" /ResultsDirectory:"C:\dbgit\fenngineering\SampleDBSolution\TestResults" /Logger:trx;LogFileName="SampleDB.SqlTests_2019-08-28-10-15-17.trx" /Settings:"C:\dbgit\fenngineering\SampleDBSolution\build\SampleDB.SqlTests.dll.runsettings"]
+Microsoft (R) Test Execution Command Line Tool Version 15.9.1
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+Passed   dbo_ATable_UnitTests
+Results File: C:\dbgit\fenngineering\SampleDBSolution\TestResults\SampleDB.SqlTests_2019-08-28-10-15-17.trx
+
+Total tests: 1. Passed: 1. Failed: 0. Skipped: 0.
+Test Run Successful.
+Test execution time: 2.2092 Seconds
+
+Test fixture [C:\dbgit\fenngineering\SampleDBSolution\build\SampleDB.SqlTests.dll] Completed Successfully
+Total Failed Tests 0
+                         |\=.
+                         /  6'
+                 .--.    \  .-'
+                /_   \   /  (_()
+                  )   | / ;--'
+                 /   / /   (
+                (    "    _)_
+                 -==-'""" "
+    ____  __  ________    ____  __________
+   / __ )/ / / /  _/ /   / __ \/ ____/ __ \
+  / __  / / / // // /   / / / / __/ / /_/ /
+ / /_/ / /_/ // // /___/ /_/ / /___/ _, _/
+/_____/\____/___/_____/_____/_____/_/ |_|
+``` 
  > Testing can only occur on one configured database connection. This is configiured in the Testing collection of the Environment collection:-
  ```
  Dev = @(
@@ -168,7 +255,7 @@ Successfully created build.zip
  ToDo:-
  - [x] Build\Publish\Test your solutuion 
  - [x] Advanced DB projects configuration
- - [ ] Build\Publish\Test a DB project 
+ - [x] Build\Publish\Test a DB project 
  - [ ] Add sample DB project 
  - [ ] Add SSIS project configuration
  - [ ] Advanced SSIS projects configuration
