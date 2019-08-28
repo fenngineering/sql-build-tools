@@ -20,8 +20,8 @@ cd sql-build-tools
 ```
 ..\test.ps1
 ```
-## Setup DB project
-1. CLONE your solution into a folder at the sample level as sql-build-tools:-
+## Setup your solution, with DB project 
+1. CLONE your DB solution into a folder at the sampe level as sql-build-tools:-
    - ROOT
      - YourSolution
      - Sql-Build-Tools
@@ -36,11 +36,11 @@ cd sql-build-tools
    - Search & Replace Placeholders:-
      - $DB-PROJECTNAME
      - $DATABASE
-    
+
 ## Advanced DB projects configuration
 
 ### Multiple Database Projects
-> The tools are capable of publishing dacpacs from muliple composite database projects in the given order, can this is useful when refactoring objects out of one database project into multiple projects. When there is a set dependency deployment order. A good example of this would be refactoring system CDC objects from the main database; you want the solution to build and recognise the CDC systems objects but you **do not** want them to the be published as they are system generared.     
+> The tools are capable of publishing dacpacs from muliple database database projects in the solution into seperate databases. Also the tools are capable of publishing dacpas from muliple database database projects in the solution into a single database in the given order. This can be useful when refactoring objects out of one database project into multiple projects. When there is a set dependency deployment order. A good example of this would be refactoring system CDC objects from the **main** database; you want the solution to build and recognise the CDC systems objects but you **do not** want them to the be published as they are system generared.     
 > Another example would be when you want to reuse objects from one database project into another, instead of having multiple defined objects in two database projects, move the dupliate objects into a new database project, then reference the 'global' database project in both database projects.
 
 1. Add multiple DB projects
@@ -49,27 +49,32 @@ cd sql-build-tools
   ```
   DbProjects = @(
 		@{
-			ProjectName="ANewDBProject.CDC"
-			DatabaseName="AGoodDB"
+			ProjectName="AGoodDB_v1"
+			DatabaseName="AGoodDB_v1"
+			PublishDB=$true
+		},
+		@{
+			ProjectName="AGoodDB_v2.CDC"
+			DatabaseName="AGoodDB_v2"
 			PublishDB=$false
 		}
 		,@{
-			ProjectName="ANewDBProject.Global"
-			DatabaseName="AGoodDB"
+			ProjectName="AGoodDB_v2.Global"
+			DatabaseName="AGoodDB_v2"
 			PublishDB=$true
 		}
 		,
 		@{
-			ProjectName="AGoodDBProject"
-			DatabaseName="AGoodDB"
+			ProjectName="AGoodDB_v2"
+			DatabaseName="AGoodDB_v2"
 			PublishDB=$true
 		}		
 	);
  ``` 
  ### Mulitple Database Environments
- > The tools are capable of building, deploying & testing to multiple environments, the sample.psd1 condig file has the default environment defined [Dev] this is your local environment. However, you can add multiple environemts, which is controlled by the **environment** system varaible, if this is not set the default [Dev] environemnts will be chosen. However, this can be overidden at runtime by passing the **-environmentOverride "<ENV>"** into the powershell script, we'll discuss this later.
+ > The tools are capable of building, deploying & testing to multiple environments, the sample.psd1 condig file has the default environment defined [Dev] this is your local environment. However, you can add multiple environemts, which is controlled by the **environment** system varaible, if this is not set the default [Dev] environemnts will **always** be chosen. However, this can be overidden at runtime by passing the **-environmentOverride "<ENV>"** into the powershell script, we'll discuss this later.
  
- 2. Add multiple database environments
+ 2. Adding multiple database environments
    - Open .\YourSolution\ps-config\<SolutionFileName-WithoutExt>.psd1 with a text editor
    - Add a new collection to the base of the config file:-  
  ```
@@ -102,9 +107,39 @@ cd sql-build-tools
 		}
 	);
  ```
+ ## Build a DB Solution
+ ```
+ 
+ ```
+ ## Publish a DB Solution
+
+ ## Test a DB Solution
+ > Testing can only occur on one configured database connection. This is configiured in the Testing collection of the Environment collection:-
+ ```
+ Dev = @(
+		@{
+			IncludeCompositeObjects=$false
+			Server="."
+			Testing = @(
+				@{
+					Database="$DATABASE"
+					UseEnvironmental = 0
+					RunTimeOut = 0
+					TestTimeOut = 0
+				}
+			)
+		}
+	); 
+ ```
+ ## Setup your solution, with SSIS project
+
  To add 
  ToDo:-
- - [ ] Add SSIS project configuration
- - [x] Add multiple DB environments configuration
+ - [x] Build\Publish\Test your solutuion 
+ - [x] Advanced DB projects configuration
+ - [ ] Build\Publish\Test a DB project 
  - [ ] Add sample DB project 
- - [ ] Add sample SSIS project 
+ - [ ] Add SSIS project configuration
+ - [ ] Advanced SSIS projects configuration
+ - [ ] Add sample SSIS project
+ - [ ] Other commands - Nuget\Package adding The Nuget config section to your config
