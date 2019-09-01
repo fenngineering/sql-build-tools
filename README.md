@@ -21,7 +21,7 @@ cd sql-build-tools
 ..\test.ps1
 ```
 ## Setup your solution, with a DB project 
-1. CLONE your DB solution into a folder at the sampe level as sql-build-tools:-
+1. CLONE your DB solution into a folder at the same level as sql-build-tools:-
    - ROOT
      - YourSolution
      - Sql-Build-Tools
@@ -29,10 +29,9 @@ cd sql-build-tools
    - ps-config
    - ps-templates (ssis solutions only)
 3. Create new config psd1 file:-
-   - Copy [Sample Config](Samples/ps-config/sample.psd1/) to .\YourSolution\ps-config
-   - Rename .\YourSolution\ps-config\sample.psd1 to .\YourSolution\ps-config\<YourSolutionFileName-WithoutExt>.psd1
-4. Update new config psd1 file:-
-   - Open .\YourSolution\ps-config\<YourSolutionFileName-WithoutExt>.psd1 with a text editor
+   - Copy [Sample Config](Samples/ps-config/config.psd1/) to .\YourSolution\ps-config\config.psd1
+4. Update your new config psd1 file:-
+   - Open .\YourSolution\ps-config\config.psd1 with a text editor
    - Search & Replace Placeholders:-
      - $DB-PROJECTNAME
      - $DATABASE
@@ -44,7 +43,7 @@ cd sql-build-tools
 > Another example would be when you want to reuse objects from one database project into another, instead of having multiple defined objects in two database projects, move the dupliate objects into a new database project, then reference the 'global' database project in both database projects.
 
 1. Add multiple DB projects
-   - Open .\YourSolution\ps-config\<SolutionFileName-WithoutExt>.psd1 with text editor
+   - Open .\YourSolution\ps-config\config.psd1 with text editor
    - Add a new item to the DbProjects Collection:-
   ```
   DbProjects = @(
@@ -75,7 +74,7 @@ cd sql-build-tools
  > The tools are capable of building, deploying & testing to multiple environments, the sample.psd1 condig file has the default environment defined [Dev] this is your local environment. However, you can add multiple environemts, which is controlled by the **environment** system varaible, if this is not set the default [Dev] environemnts will **always** be chosen. However, this can be overidden at runtime by passing the **-environmentOverride "<ENV>"** into the powershell script, we'll discuss this later.
  
  2. Adding multiple database environments
-   - Open .\YourSolution\ps-config\<SolutionFileName-WithoutExt>.psd1 with a text editor
+   - Open .\YourSolution\ps-config\config.psd1 with a text editor
    - Add a new collection to the base of the config file:-  
  ```
  Dev = @( 
@@ -190,7 +189,7 @@ Updating database (Complete)
 /_____/\____/___/_____/_____/_____/_/ |_|
 ```
  ## Test a DB Solution
- > Testing can only occur on one configured database connection. This is configiured in the Testing collection of the Environment collection:-
+ > Testing can only occur on one configured database connection. This is configiured in the Testing section of the Environment collection in  the solution config:-
  ```
  Dev = @(
 		@{
@@ -220,7 +219,7 @@ cd SampleDBSolution
 This should produce the below:-
 ```
 PS C:\dbgit\fenngineering\SampleDBSolution> ..\sql-build-tools\ps-scripts\test.ps1
-Testing against environment dev...
+Testing against environment dev... 
 Running vstest with the following args: [vstest.console.exe "C:\dbgit\fenngineering\SampleDBSolution\build\SampleDB.SqlTests.dll" /ResultsDirectory:"C:\dbgit\fenngineering\SampleDBSolution\TestResults" /Logger:trx;LogFileName="SampleDB.SqlTests_2019-08-28-10-15-17.trx" /Settings:"C:\dbgit\fenngineering\SampleDBSolution\build\SampleDB.SqlTests.dll.runsettings"]
 Microsoft (R) Test Execution Command Line Tool Version 15.9.1
 Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -250,8 +249,14 @@ Total Failed Tests 0
 /_____/\____/___/_____/_____/_____/_/ |_|
 ``` 
  ## Setup your solution, with SSIS project
+ > Protection Level must not be configured with EncryptAllWithUserKey or EncryptSensitiveWithUserKey
+ 
+ 
+ ## Build\Publish\Test the whole solution
+> The tools are also capable of building the whole solution instead of individual project types. All project types supported by **MSBUILD** are compatable with these tools for Building. [MSBUILD info] (https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-toolset-toolsversion?view=vs-2019).
 
- To add 
+> For publishing; database, ssis and analysis services projects are supported (with configuration mentioned above)
+
  ToDo:-
  - [x] Build\Publish\Test your solutuion 
  - [x] Advanced DB projects configuration
