@@ -110,7 +110,7 @@ cd sql-build-tools
 1. Open powershell.
 2. Change directory the solution folder.
 ```
-cd SampleDBSolution
+cd SampleSolution
 ```
 3. Ensuring the tools are in the same root folder run the below:-
 
@@ -119,14 +119,14 @@ cd SampleDBSolution
 ```
 This should produce the below:-
 ```
-PS C:\dbgit\fenngineering\SampleDBSolution> ..\sql-build-tools\ps-scripts\build.ps1 -build "DB"
+PS C:\dbgit\fenngineering\SampleSolution> ..\sql-build-tools\ps-scripts\build.ps1 -build "DB"
 Building Release configuration to environment dev...
 Successfully deleted build.zip
-Deleting packages folder [C:\dbgit\fenngineering\SampleDBSolution\packages]
-Building solution [C:\dbgit\fenngineering\SampleDBSolution\SampleDBSolution.sln]
+Deleting packages folder [C:\dbgit\fenngineering\SampleSolution\packages]
+Building solution [C:\dbgit\fenngineering\SampleSolution\SampleSolution.sln]
 Installing vswhere package.
-Running msbuild with the following args: [C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe "C:\dbgit\fenngineering\SampleDBSolution\SampleDBSolution.sln" /p:Configuration=Release /p:OutputPath="C:\dbgit\fenngineering\SampleDBSolution\build" /verbosity:quiet /nologo /target:Clean;Build]
-Successfully Built [SampleDBSolution.sln] Solution
+Running msbuild with the following args: [C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe "C:\dbgit\fenngineering\SampleSolution\SampleSolution.sln" /p:Configuration=Release /p:OutputPath="C:\dbgit\fenngineering\SampleSolution\build" /verbosity:quiet /nologo /target:Clean;Build]
+Successfully Built [SampleSolution.sln] Solution
 Created pre-release 0.130.1-pre-release
 Successfully created build.zip
                          |\=.
@@ -147,7 +147,7 @@ Successfully created build.zip
 1. Open powershell.
 2. Change directory the solution folder.
 ```
-cd SampleDBSolution
+cd SampleSolution
 ```
 3. Ensuring the tools are in the same root folder run the below:-
 
@@ -156,7 +156,7 @@ cd SampleDBSolution
 ```
 This should produce the below:-
 ```
-PS C:\dbgit\fenngineering\SampleDBSolution> ..\sql-build-tools\ps-scripts\publish.ps1 -publish "DB"
+PS C:\dbgit\fenngineering\SampleSolution> ..\sql-build-tools\ps-scripts\publish.ps1 -publish "DB"
 Publishing to environment dev...
 Is this is a production environment? [False]
 
@@ -193,13 +193,17 @@ Updating database (Complete)
  > If the SSIS project Protection Level is configure with EncryptAllWithPassword or EncryptSensitiveWithPassword, then a Encrypted Password must be configured, to create an Encrypted Passwprd then go to the Other Commands\Encrypt secition.
  > If the SSIS project type is configure with DontSaveSensitive then **no** Encrypted Password is required.
  
- 1. CLONE your DB solution into a folder at the same level as sql-build-tools:-
+ 1. CLONE your SSIS solution into a folder at the same level as sql-build-tools:-
    - ROOT
      - YourSolution
      - Sql-Build-Tools
 2. Within your solution create folders:-
    - ps-config
-   - ps-templates (ssis solutions only)
+   - ps-templates\SsisProjectParams (ssis solutions only)
+3. Copy your ssis project params file to the SsisProjectParams folder for templating from config.psd1. 
+> The tools support templating the <ssisproject>.params with values configured with in the config.psd1. This can be useful when deploying the project from one environment to the other. For more details see SSIS project params templating from config.psd1  
+   - Copy .\YourSolution\<ssisproject>\<ssisproject>.params to .\ps-templates\SsisProjectParams\<ssisproject>.eps
+   
 3. Create new config psd1 file:-
    - Copy [Sample Config](Samples/ps-config/config.psd1/) to .\YourSolution\ps-config\config.psd1
 4. Update your new config psd1 file:-
@@ -277,7 +281,7 @@ Updating database (Complete)
 			)
 		}
 	);
-## Build a DB Solution
+## Build a SSIS Solution
 1. Open powershell.
 2. Change directory the solution folder.
 ```
@@ -286,18 +290,40 @@ cd SampleSolution
 3. Ensuring the tools are in the same root folder run the below:-
 
 ```
-..\sql-build-tools\ps-scripts\build.ps1 -build "DB"
+..\sql-build-tools\ps-scripts\build.ps1 -build "SSIS"
 ```
 This should produce the below:-
 ```
-PS C:\dbgit\fenngineering\SampleDBSolution> ..\sql-build-tools\ps-scripts\build.ps1 -build "DB"
+PS C:\dbgit\fenngineering\SampleSolution> powershell ..\sql-build-tools\ps-scripts\build.ps1 -build "SSIS"
 Building Release configuration to environment dev...
 Successfully deleted build.zip
-Deleting packages folder [C:\dbgit\fenngineering\SampleDBSolution\packages]
-Building solution [C:\dbgit\fenngineering\SampleDBSolution\SampleDBSolution.sln]
-Installing vswhere package.
-Running msbuild with the following args: [C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe "C:\dbgit\fenngineering\SampleDBSolution\SampleDBSolution.sln" /p:Configuration=Release /p:OutputPath="C:\dbgit\fenngineering\SampleDBSolution\build" /verbosity:quiet /nologo /target:Clean;Build]
-Successfully Built [SampleDBSolution.sln] Solution
+solutionPath [C:\dbgit\fenngineering\SampleSolution]
+Building project [SampleSSIS\SampleSSIS.dtproj]
+SSIS Build 'C:\dbgit\fenngineering\sql-build-tools\build\SqlBuildTools.Utils.dll'
+SSIS Build Engine
+Copyright (c) 2017 Roman Tumaykin
+
+Executing SSIS Build with the following arguments:
+Project File: C:\dbgit\fenngineering\SampleSolution\SampleSSIS\SampleSSIS.dtproj
+-ProtectionLevel: DontSaveSensitive
+-OutputFolder: C:\dbgit\fenngineering\SampleSolution\build
+-Configuration: Development
+
+Project parameters:
+  Project::SourceDBName: SSISDB
+  Project::SourceDBServer: .
+-------------------------------------------------------------------------------
+Starting build. Loading project files from C:\dbgit\fenngineering\SampleSolution\SampleSSIS\SampleSSIS.dtproj.
+
+Parameters with values unchanged:
+
+Parameters with values from configuration:
+
+Parameters with values from Buld Parameter Arguments:
+Protection Level is unchanged: DontSaveSensitive.
+
+Build completed successfully
+Successfully Built [SampleSSIS] Project
 Created pre-release 0.130.1-pre-release
 Successfully created build.zip
                          |\=.
@@ -314,7 +340,7 @@ Successfully created build.zip
  / /_/ / /_/ // // /___/ /_/ / /___/ _, _/
 /_____/\____/___/_____/_____/_____/_/ |_|
 ```
-## Publish a DB Solution
+## Publish a SSIS Solution
 1. Open powershell.
 2. Change directory the solution folder.
 ```
@@ -327,37 +353,7 @@ cd SampleSolution
 ```
 This should produce the below:-
 ```
-PS C:\dbgit\fenngineering\SampleDBSolution> ..\sql-build-tools\ps-scripts\publish.ps1 -publish "SSIS"
-Publishing to environment dev...
-Is this is a production environment? [False]
 
-Setting Command Variables...
-
-environment
-
-Starting dacpac deployment...
-Initializing deployment (Start)
-The following SqlCmd variables are not defined in the target scripts: environment.
-Initializing deployment (Complete)
-Analyzing deployment plan (Start)
-Analyzing deployment plan (Complete)
-Updating database (Start)
-Creating SampleDB...
-Update complete.
-Updating database (Complete)
-                         |\=.
-                         /  6'
-                 .--.    \  .-'
-                /_   \   /  (_()
-                  )   | / ;--'
-                 /   / /   (
-                (    "    _)_
-                 -==-'""" "
-    ____  __  ________    ____  __________
-   / __ )/ / / /  _/ /   / __ \/ ____/ __ \
-  / __  / / / // // /   / / / / __/ / /_/ /
- / /_/ / /_/ // // /___/ /_/ / /___/ _, _/
-/_____/\____/___/_____/_____/_____/_/ |_|
 ```
 
 ## Testing a Solution
@@ -435,5 +431,6 @@ Total Failed Tests 0
  - [x] Build\Publish a SSIS project 
  - [x] Advanced SSIS projects configuration
  - [ ] Add sample SSIS project
+ - [ ] SSIS project params templating from config.psd1
  - [ ] Build\Publish\Test the Solution
  - [ ] Other commands - Encrypt\Nuget\Package adding The Nuget config section to your config
