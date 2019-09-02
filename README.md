@@ -394,11 +394,29 @@ Successfully deployed [C:\dbgit\fenngineering\SampleSolution\build\SampleSSIS.is
 
 > For publishing; database, ssis and analysis services projects are supported (with configuration mentioned above)
 
+> Testing can only occur on one configured database connection. This is configiured in the Testing section of the Environment collection in  the solution config:-
+ ```
+ Dev = @(
+		@{
+			IncludeCompositeObjects=$false
+			Server="."
+			Testing = @(
+				@{
+					Database="$DATABASE"
+					UseEnvironmental = 0
+					RunTimeOut = 0
+					TestTimeOut = 0
+				}
+			)
+		}
+	); 
+ ```
+
 ### Build a Solution
 1. Open powershell.
 2. Change directory the solution folder.
 ```
-cd SampleDBSolution
+cd SampleSolution
 ```
 3. Ensuring the tools are in the same root folder run the below:-
 
@@ -462,7 +480,7 @@ Successfully created build.zip
 1. Open powershell.
 2. Change directory the solution folder.
 ```
-cd SampleDBSolution
+cd SampleSolution
 ```
 3. Ensuring the tools are in the same root folder run the below:-
 
@@ -517,27 +535,10 @@ Successfully deployed [C:\dbgit\fenngineering\SampleSolution\build\SampleSSIS.is
 /_____/\____/___/_____/_____/_____/_/ |_|
 ```
 ### Testing a Solution
- > Testing can only occur on one configured database connection. This is configiured in the Testing section of the Environment collection in  the solution config:-
- ```
- Dev = @(
-		@{
-			IncludeCompositeObjects=$false
-			Server="."
-			Testing = @(
-				@{
-					Database="$DATABASE"
-					UseEnvironmental = 0
-					RunTimeOut = 0
-					TestTimeOut = 0
-				}
-			)
-		}
-	); 
- ```
 1. Open powershell.
 2. Change directory the solution folder.
 ```
-cd SampleDBSolution
+cd SampleSolution
 ```
 3. Ensuring the tools are in the same root folder run the below:-
 
@@ -546,21 +547,21 @@ cd SampleDBSolution
 ```
 This should produce the below:-
 ```
-PS C:\dbgit\fenngineering\SampleDBSolution> ..\sql-build-tools\ps-scripts\test.ps1
+PS C:\dbgit\fenngineering\SampleSolution> ..\sql-build-tools\ps-scripts\test.ps1
 Testing against environment dev... 
-Running vstest with the following args: [vstest.console.exe "C:\dbgit\fenngineering\SampleDBSolution\build\SampleDB.SqlTests.dll" /ResultsDirectory:"C:\dbgit\fenngineering\SampleDBSolution\TestResults" /Logger:trx;LogFileName="SampleDB.SqlTests_2019-08-28-10-15-17.trx" /Settings:"C:\dbgit\fenngineering\SampleDBSolution\build\SampleDB.SqlTests.dll.runsettings"]
+Running vstest with the following args: [vstest.console.exe "C:\dbgit\fenngineering\SampleSolution\build\SampleDB.SqlTests.dll" /ResultsDirectory:"C:\dbgit\fenngineering\SampleSolution\TestResults" /Logger:trx;LogFileName="SampleDB.SqlTests_2019-08-28-10-15-17.trx" /Settings:"C:\dbgit\fenngineering\SampleSolution\build\SampleDB.SqlTests.dll.runsettings"]
 Microsoft (R) Test Execution Command Line Tool Version 15.9.1
 Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Starting test execution, please wait...
 Passed   dbo_ATable_UnitTests
-Results File: C:\dbgit\fenngineering\SampleDBSolution\TestResults\SampleDB.SqlTests_2019-08-28-10-15-17.trx
+Results File: C:\dbgit\fenngineering\SampleSolution\TestResults\SampleDB.SqlTests_2019-08-28-10-15-17.trx
 
 Total tests: 1. Passed: 1. Failed: 0. Skipped: 0.
 Test Run Successful.
 Test execution time: 2.2092 Seconds
 
-Test fixture [C:\dbgit\fenngineering\SampleDBSolution\build\SampleDB.SqlTests.dll] Completed Successfully
+Test fixture [C:\dbgit\fenngineering\SampleSolution\build\SampleDB.SqlTests.dll] Completed Successfully
 Total Failed Tests 0
                          |\=.
                          /  6'
@@ -587,5 +588,5 @@ Total Failed Tests 0
  - [x] Advanced SSIS projects configuration
  - [X] Add sample SSIS project
  - [ ] SSIS project params templating from config.psd1
- - [ ] Build\Publish\Test the Solution
+ - [X] Build\Publish\Test the Solution
  - [ ] Other commands - Encrypt\Nuget\Package adding The Nuget config section to your config
