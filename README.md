@@ -1,6 +1,6 @@
 # Sql Build Tools 
 
-A bunch of powershell scripts to perform DevOps routines like build, publish and test MSSQL Stack (SQLDB, SSIS, SSAS).
+A bunch of powershell scripts to perform DevOps routines like build, publish and test on the MSSQL Stack (SQLDB, SSIS, SSAS).
 
 ## Installation 
 1. Open powershell.
