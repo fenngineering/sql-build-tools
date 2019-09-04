@@ -302,7 +302,15 @@ function Invoke-PublishIs
 
                         Invoke-CreateIsFolder -ssisFolderName $ssisProject.FolderName
 
-                        if (-not($(Invoke-SsisPublish -DeploymentFilePath $isPac -ServerInstance $config[$environment].SSIS.Server -Catalog "SSISDB" -DeploymentFolder $ssisProject.FolderName -ProjectName $ssisProject.ProjectName) -eq " 0"))
+						$protectionLevel = $ssisProject.ProtectionLevel 
+						$password = $null
+
+						if(($protectionLevel -eq "EncryptAllWithPassword") -or ($protectionLevel -eq "EncryptSensitiveWithPassword")) {
+							$encryptedPassword = $ssisProject.EncryptedPassword
+							$password = $(Get-DecryptedString -encryptedString $encryptedPassword -keyFile $ssisProject.SecureKeyFile)
+						}
+
+                        if (-not($(Invoke-SsisPublish -DeploymentFilePath $isPac -ServerInstance $config[$environment].SSIS.Server -Catalog "SSISDB" -DeploymentFolder $ssisProject.FolderName -projectName $ssisProject.ProjectName -projectPassword $password) -eq " 0"))
                         {
                             Throw  "Failed to deploy [$($isPac)]"
                         }
@@ -311,6 +319,7 @@ function Invoke-PublishIs
                     }
                 }
             }
+
 
             Remove-Module -Name ssispublish
         }

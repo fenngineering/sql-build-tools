@@ -22,9 +22,7 @@ function Invoke-Process(){
         [Parameter(Mandatory=$False)]
         [string]$workingDirectory,
         [Parameter(Mandatory=$False)]
-        [bool]$captureConsoleOut = $False,
-        [Parameter(Mandatory=$False)]
-        [string]$consoleOut
+        [bool]$captureConsoleOut = $False
     )
     process{
 

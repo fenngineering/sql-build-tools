@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[ATable]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[ATableDescription] NVARCHAR(255) NOT NULL
+)

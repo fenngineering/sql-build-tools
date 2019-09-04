@@ -21,7 +21,12 @@ function Invoke-SsisBuild{
         [Parameter(Mandatory=$True)]
         [string]$solutionFilePath,
         [Parameter(Mandatory=$True)]
-        [string]$projectName
+        [string]$projectName,
+        [Parameter(Mandatory=$True)]
+        [string]$protectionLevel,
+        [Parameter(Mandatory=$False)]
+        [string]$password
+
     )
     process{
 
@@ -42,14 +47,14 @@ function Invoke-SsisBuild{
 		{		
 			$ssisBuilder = New-Object SqlBuildTools.Utils.SSISBuilder 
 			$ssisBuilder.ProjectPath = $projectFilePath 
-			$ssisBuilder.NewPassword = "test" 
+			$ssisBuilder.ProtectionLevel = $protectionLevel 
+			$ssisBuilder.Password = $password
 			$ssisBuilder.OutputFolder = $(Get-BuildDir) 
 			$ssisBuilder.Configuration = "Development" 
 			$ssisBuilder.Parameters = @{"Project::SourceDBServer" = "."; "Project::SourceDBName" = "SSISDB"}
 
 			$ssisBuilder.Build($solutionPath)
 
-			#New-SsisDeploymentPackage -ProtectionLevel "EncryptSensitiveWithPassword" -ProjectPath $projectFilePath -NewPassword "test" -OutputFolder $(Get-BuildDir) -Configuration "Development" -Parameters @{"Project::SourceDBServer" = "."; "Project::SourceDBName" = "SSISDB"}
 			return $true
 		}
 		catch {

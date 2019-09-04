@@ -9,11 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlBuildTools.Contributors"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SqlBuildTools.DB", "SqlBuildTools.DB\SqlBuildTools.DB.sqlproj", "{2431A28B-D38A-4BC8-964B-261E36246150}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{77346FAE-784A-4AE2-8B46-1CA585688DDC}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ps-config", "ps-config", "{7CAFF89F-5373-4230-95F6-86B50648C059}"
 	ProjectSection(SolutionItems) = preProject
 		ps-config\globalConfig.psd1 = ps-config\globalConfig.psd1

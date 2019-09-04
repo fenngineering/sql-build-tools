@@ -18,12 +18,18 @@ param()
 function Invoke-SsisPublish{
     [cmdletbinding()]
     param(
-        [Parameter(Mandatory=$true)][string]$DeploymentFilePath,
-	    [Parameter(Mandatory=$true)][string]$ServerInstance,
-	    [Parameter(Mandatory=$true)][string]$Catalog,
-	    [Parameter(Mandatory=$true)][string]$DeploymentFolder,
-	    [Parameter(Mandatory=$true)][string]$ProjectName,
-	    [Parameter(Mandatory=$false)][string]$ProjectPassword = $null
+        [Parameter(Mandatory=$true)]
+		[string]$deploymentFilePath,
+	    [Parameter(Mandatory=$true)]
+		[string]$serverInstance,
+	    [Parameter(Mandatory=$true)]
+		[string]$catalog,
+	    [Parameter(Mandatory=$true)]
+		[string]$deploymentFolder,
+	    [Parameter(Mandatory=$true)]
+		[string]$projectName,
+	    [Parameter(Mandatory=$false)]
+		[string]$projectPassword = $null
     )
     process{
 
@@ -41,16 +47,14 @@ function Invoke-SsisPublish{
 		try
 		{
 			$ssisPublisher = New-Object SqlBuildTools.Utils.SSISPublisher
-			$ssisPublisher.DeploymentFilePath =  $DeploymentFilePath 
-			$ssisPublisher.ServerInstance =  $ServerInstance 
-			$ssisPublisher.Catalog =  $Catalog 
-			$ssisPublisher.Folder =  $DeploymentFolder 
-			$ssisPublisher.ProjectName =  $ProjectName 
-			$ssisPublisher.ProjectPassword =  "test"
+			$ssisPublisher.DeploymentFilePath = $deploymentFilePath 
+			$ssisPublisher.ServerInstance = $serverInstance 
+			$ssisPublisher.Catalog = $catalog 
+			$ssisPublisher.Folder = $deploymentFolder 
+			$ssisPublisher.ProjectName =  $projectName 
+			$ssisPublisher.ProjectPassword =  $projectPassword
 			$ssisPublisher.EraseSensitiveInfo = $true
 
-			Write-Host "solutionPath: [$($solutionPath)]"
-			
 			$ssisPublisher.Publish($solutionPath)
 
 			#Publish-SsisDeploymentPackage -DeploymentFilePath $DeploymentFilePath -ServerInstance $ServerInstance -Catalog $Catalog -Folder $DeploymentFolder -ProjectName $ProjectName -ProjectPassword "test"

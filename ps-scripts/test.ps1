@@ -36,7 +36,7 @@ function Invoke-CreateSqlTestConfig {
         $configTemplate = "$(Join-Path $toolsPath "ps-templates\SqlUnitTesting\Config.eps")"
         $configFile = "$(Join-Path $solutionPath "\build\$($sqlTestFile).dll.config")"
 
-        $connectionString = $(Get-ConnectionString -serverName $config[$environment].Server -databaseName $config[$environment].Database)
+        $connectionString = $(Get-ConnectionString -serverName $config[$environment].Server -databaseName $config[$environment].Testing.Database)
 
         New-Item $configFile -type file -force -value $(Expand-Template -file $configTemplate -binding @{ connectionString = $connectionString}) | Out-Null            
     

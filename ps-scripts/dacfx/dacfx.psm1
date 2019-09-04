@@ -75,12 +75,11 @@ function Register-DacServices{
 				#Import-Module $loader.FullName -Scope Local
 				#$(New-AppDomain -appBase $dacFxPath)
 
-
+				$dacFxPath = $(Get-File -path "$($toolsPath)\build\" -fileName "Microsoft.SqlServer.Dac.dll")
+				$dacFxConts = $(Get-File -path "$($toolsPath)\build\" -fileName "SqlBuildTools.Contributors.dll")
 				$dacDomPath = $(Get-File -path "$($toolsPath)\build\" -fileName "Microsoft.SqlServer.TransactSql.ScriptDom.dll")
 				$dacFxExtPath = $(Get-File -path "$($toolsPath)\build\" -fileName "Microsoft.SqlServer.Dac.Extensions.dll") 
 				$dacFxToolsath = $(Get-File -path "$($toolsPath)\build\" -fileName "Microsoft.Data.Tools.Utilities.dll") 
-				$dacFxPath = $(Get-File -path "$($toolsPath)\build\" -fileName "Microsoft.SqlServer.Dac.dll")
-				$dacFxConts = $(Get-File -path "$($toolsPath)\build\" -fileName "SqlBuildTools.Contributors.dll")
 			
 				#Load-AssemblyInAppDomain -domain $script:newDomain -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacDomPath.FullName))
 				#Load-AssemblyInAppDomain -domain $script:newDomain -assembly $dacFxExtPath.FullName
@@ -88,11 +87,18 @@ function Register-DacServices{
 				#Load-AssemblyInAppDomain -domain $script:newDomain -assembly $dacFxPath.FullName
 				#Load-AssemblyInAppDomain -domain $script:newDomain -assembly $dacFxConts.FullName
 
-				Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacDomPath.FullName))
-				Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxExtPath.FullName))
-				Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxToolsath.FullName))
-				Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxPath.FullName))
-				Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxConts.FullName))
+				if(Test-Path -Path $dacFxPath.FullName -PathType Leaf) {
+
+					Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacDomPath.FullName))
+					Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxExtPath.FullName))
+					Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxToolsath.FullName))
+					Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxPath.FullName))
+					Import-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly $([System.Reflection.AssemblyName]::GetAssemblyName($dacFxConts.FullName))
+				}
+				else {
+					Write-Error "DacFx tools missing, please rebuild sql-build-tools."
+					return false
+				}
 			}
 			return $(Confirm-AssemblyInAppDomain -domain $([AppDomain]::CurrentDomain) -assembly "Microsoft.SqlServer.Dac")
         }
@@ -242,7 +248,6 @@ function Export-DeployScript{
 					$deployOptions.AdditionalDeploymentContributorArguments = [SqlBuildTools.Contributors.Utils]::BuildContributorArguments($contArgs)
 
 					$sqlCmdVars = New-Object 'System.Collections.Generic.Dictionary[String,String]'
-
                     
 					foreach($ht in $global:sqlCommandVariables )
 					{
@@ -602,10 +607,6 @@ function Publish-DacPac{
 						Write-Host ""
 						Write-Host "Setting Command Variables... "
                         Write-Host ""
-
-						Write-Host "environment"
-
-						$deployOptions.SqlCommandVariableValues.Add("environment", $environment)
 
 						foreach($ht in $global:sqlCommandVariables )
 						{

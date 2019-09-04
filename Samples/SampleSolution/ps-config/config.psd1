@@ -1,12 +1,21 @@
 @{
-	SolutionName="$SOLUTION-NAME"
 	SqlVersion="130"
 	IgnorePackageVersioning= $True
+	SSISDatabaseName="SSISDB"
 	DbProjects = @(
 		@{
-			ProjectName="$DB-PROJECTNAME"
-			DatabaseName="$DATABASE"
+			ProjectName="SampleDB"
+			DatabaseName="SampleDB"
 			PublishDB=$true
+		}
+	);
+	SsisProjects=@(
+		@{
+			ProjectName="SampleSSIS"
+			FolderName="SampleSSIS"
+			ProtectionLevel="DontSaveSensitive"
+			EncryptedPassword=""
+			SecureKeyFile=""
 		}
 	);
 	Nuget = @(
@@ -20,9 +29,14 @@
 		@{
 			IncludeCompositeObjects=$false
 			Server="."
-			Database="$DATABASE"
+			SSIS = @(
+				@{
+					Server="."
+				}
+			)
 			Testing = @(
 				@{
+					Database="SampleDB"
 					UseEnvironmental = 0
 					RunTimeOut = 0
 					TestTimeOut = 0

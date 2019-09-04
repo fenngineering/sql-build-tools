@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ps-scripts\extract.ps1" />
+    <Compile Include="ps-scripts\encrypt.ps1" />
     <Compile Include="ps-scripts\semver.ps1" />
     <Compile Include="ps-scripts\ssisbuild\ssisbuild.psm1" />
     <Compile Include="ps-scripts\ssispublish\ssispublish.psm1" />

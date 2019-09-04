@@ -16,7 +16,9 @@ param(
     [Parameter(Mandatory=$False)]
     [bool]$initalisePackages = $True,
     [Parameter(Mandatory=$False)]
-    [bool]$installPackages = $True
+    [bool]$installPackages = $True,
+    [Parameter(Mandatory=$False)]
+    [bool]$ssisPassword = $True
 )
 
 $here = Split-Path $MyInvocation.MyCommand.Path
@@ -91,7 +93,15 @@ function Invoke-BuildIs{
 
 				Write-Host "solutionPath [$($solutionPath)]"
 
-				if(-not($(Invoke-SsisBuild -solutionFilePath $solutionFilePath.FullName -projectName $ssisProject.ProjectName) -eq "0")) {
+				$protectionLevel = $ssisProject.ProtectionLevel 
+				$password = $null
+
+				if(($protectionLevel -eq "EncryptAllWithPassword") -or ($protectionLevel -eq "EncryptSensitiveWithPassword")) {
+					$encryptedPassword = $ssisProject.EncryptedPassword
+					$password = $(Get-DecryptedString -encryptedString $encryptedPassword -keyFile $ssisProject.SecureKeyFile)
+				}
+
+				if(-not($(Invoke-SsisBuild -solutionFilePath $solutionFilePath.FullName -projectName $ssisProject.ProjectName -protectionLevel $protectionLevel -password $password) -eq "0")) {
 					
 					Throw "Failed to Build [$($ssisProject.ProjectName)] Project"
 				}
@@ -230,12 +240,8 @@ if($installPackages)
 	Write-Verbose "Installing Packages"
 
     Import-Module nuget
-    
-    $output = $(Install-Packages -restoreReferences $True -initalisePackages $initalisePackages -solutionFilePath $solutionFilePath)
 
-    Write-Host "Output [$output]"
-
-	if(($output) -ne $True) {
+	if(($(Install-Packages -restoreReferences $True -initalisePackages $initalisePackages -solutionFilePath $solutionFilePath)) -ne $True) {
 		Throw  'Failed to install packages for solution [$solutionFilePath]'
     }
 
@@ -293,6 +299,3 @@ $Error.Clear()
 Get-PSSession | Remove-PSSession
 Exit-PSSession
 [System.GC]::Collect()
-
-#Start-Process PowerShell.exe
-##exit

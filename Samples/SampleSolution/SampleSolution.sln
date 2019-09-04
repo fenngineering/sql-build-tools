@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SampleDB", "SampleDB\SampleDB.sqlproj", "{14729FE7-272F-4819-B890-8AFE13B77E25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ps-config", "ps-config", "{DDE17205-60B3-4A4C-B210-EA3AE39792A1}"
+	ProjectSection(SolutionItems) = preProject
+		ps-config\config.psd1 = ps-config\config.psd1
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDB.SqlTests", "SampleDB.SqlTests\SampleDB.SqlTests.csproj", "{A0ADAB74-2036-40F5-A38F-93A011E101F7}"
+EndProject
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "SampleSSIS", "SampleSSIS\SampleSSIS.dtproj", "{2FADF0C8-B643-49BB-AD83-1ED60E536127}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ps-templates", "ps-templates", "{B95E581F-0F9D-4254-8AB0-8D67C21E3F40}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SsisProjectParams", "SsisProjectParams", "{BE063453-C5B6-47C7-88BB-2EA61286216D}"
+	ProjectSection(SolutionItems) = preProject
+		ps-templates\SsisProjectParams\SampleSSIS.eps = ps-templates\SsisProjectParams\SampleSSIS.eps
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Development|Any CPU = Development|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14729FE7-272F-4819-B890-8AFE13B77E25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14729FE7-272F-4819-B890-8AFE13B77E25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14729FE7-272F-4819-B890-8AFE13B77E25}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{14729FE7-272F-4819-B890-8AFE13B77E25}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{14729FE7-272F-4819-B890-8AFE13B77E25}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{14729FE7-272F-4819-B890-8AFE13B77E25}.Development|Any CPU.Deploy.0 = Debug|Any CPU
+		{14729FE7-272F-4819-B890-8AFE13B77E25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14729FE7-272F-4819-B890-8AFE13B77E25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14729FE7-272F-4819-B890-8AFE13B77E25}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A0ADAB74-2036-40F5-A38F-93A011E101F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0ADAB74-2036-40F5-A38F-93A011E101F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0ADAB74-2036-40F5-A38F-93A011E101F7}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0ADAB74-2036-40F5-A38F-93A011E101F7}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{A0ADAB74-2036-40F5-A38F-93A011E101F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0ADAB74-2036-40F5-A38F-93A011E101F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FADF0C8-B643-49BB-AD83-1ED60E536127}.Debug|Any CPU.ActiveCfg = Development
+		{2FADF0C8-B643-49BB-AD83-1ED60E536127}.Debug|Any CPU.Build.0 = Development
+		{2FADF0C8-B643-49BB-AD83-1ED60E536127}.Development|Any CPU.ActiveCfg = Development
+		{2FADF0C8-B643-49BB-AD83-1ED60E536127}.Development|Any CPU.Build.0 = Development
+		{2FADF0C8-B643-49BB-AD83-1ED60E536127}.Release|Any CPU.ActiveCfg = Development
+		{2FADF0C8-B643-49BB-AD83-1ED60E536127}.Release|Any CPU.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BE063453-C5B6-47C7-88BB-2EA61286216D} = {B95E581F-0F9D-4254-8AB0-8D67C21E3F40}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {07881E05-A6BA-4D20-A16C-4DA4BFA4DA2A}
+	EndGlobalSection
+EndGlobal

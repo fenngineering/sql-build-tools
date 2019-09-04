@@ -891,6 +891,28 @@ function Confirm-AssemblyInAppDomain {
 	}
 }
 
+function Get-DecryptedString {
+    [cmdletbinding()]
+    param(
+        [Parameter(Mandatory=$True)]
+        [string]$encryptedString,
+		[Parameter(Mandatory=$True)]
+        [string]$keyFile
+	)
+    process{ 
+
+		$key = Get-Content $keyFile
+
+		$secureString = ConvertTo-SecureString $encryptedString -Key $key
+
+		$Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToCoTaskMemUnicode($secureString)
+		$decryptedString = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($Ptr)
+		[System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr) 
+
+		return $decryptedString
+	}
+}
+
 Export-ModuleMember -Function 'New-Folder'
 
 Export-ModuleMember -Function 'Write-Pixel'
@@ -950,6 +972,8 @@ Export-ModuleMember -Function 'Invoke-ApplyTemplate'
 Export-ModuleMember -Function 'Import-AssemblyInAppDomain'
 
 Export-ModuleMember -Function 'Confirm-AssemblyInAppDomain'
+
+Export-ModuleMember -Function 'Get-DecryptedString'
 
 Export-ModuleMember -Variable 'config'
 

@@ -112,9 +112,9 @@ function Invoke-VSTest {
         Import-Module process
   
         'Running vstest with the following args: [vstest.console.exe {0}]' -f ($cmdArgs -join ' ') | Write-Host
-			$returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs)
+			$returnCode = $(Invoke-Process -processFileName $processFileName -cmdArgs $cmdArgs -captureConsoleOut $True)
 
-		Write-Verbose "vstest returnCode $($returnCode)"
+		Write-Verbose "vstest returnCode [$($returnCode)["
 
 		$resultsFile = $(Get-File -path $testResultsDir -fileName $testResultsName )
         
