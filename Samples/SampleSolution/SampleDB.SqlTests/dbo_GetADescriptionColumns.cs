@@ -10,10 +10,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace SampleDB.SqlTests
 {
     [TestClass()]
-    public class dbo_CheckDesign : SqlDatabaseTestClass
+    public class dbo_GetADescriptionColumns : SqlDatabaseTestClass
     {
 
-        public dbo_CheckDesign()
+        public dbo_GetADescriptionColumns()
         {
             InitializeComponent();
         }
@@ -30,9 +30,9 @@ namespace SampleDB.SqlTests
         }
 
         [TestMethod()]
-        public void GetCouponDesigns()
+        public void GetADescriptionColumns()
         {
-            SqlDatabaseTestActions testActions = this.GetCouponDesignsData;
+            SqlDatabaseTestActions testActions = this.GetADescriptionColumnsData;
             // Execute the pre-test script
             // 
             System.Diagnostics.Trace.WriteLineIf((testActions.PretestAction != null), "Executing pre-test script...");
@@ -55,28 +55,28 @@ namespace SampleDB.SqlTests
         /// </summary>
         private void InitializeComponent()
         {
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction GetCouponDesigns_TestAction;
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(dbo_CheckDesign));
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction GetADescriptionColumns_TestAction;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(dbo_GetADescriptionColumns));
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.InconclusiveCondition inconclusiveCondition1;
-            this.GetCouponDesignsData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
-            GetCouponDesigns_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
+            this.GetADescriptionColumnsData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
+            GetADescriptionColumns_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             inconclusiveCondition1 = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.InconclusiveCondition();
             // 
-            // GetCouponDesignsData
+            // GetADescriptionColumns_TestAction
             // 
-            this.GetCouponDesignsData.PosttestAction = null;
-            this.GetCouponDesignsData.PretestAction = null;
-            this.GetCouponDesignsData.TestAction = GetCouponDesigns_TestAction;
-            // 
-            // GetCouponDesigns_TestAction
-            // 
-            GetCouponDesigns_TestAction.Conditions.Add(inconclusiveCondition1);
-            resources.ApplyResources(GetCouponDesigns_TestAction, "GetCouponDesigns_TestAction");
+            GetADescriptionColumns_TestAction.Conditions.Add(inconclusiveCondition1);
+            resources.ApplyResources(GetADescriptionColumns_TestAction, "GetADescriptionColumns_TestAction");
             // 
             // inconclusiveCondition1
             // 
             inconclusiveCondition1.Enabled = true;
             inconclusiveCondition1.Name = "inconclusiveCondition1";
+            // 
+            // GetADescriptionColumnsData
+            // 
+            this.GetADescriptionColumnsData.PosttestAction = null;
+            this.GetADescriptionColumnsData.PretestAction = null;
+            this.GetADescriptionColumnsData.TestAction = GetADescriptionColumns_TestAction;
         }
 
         #endregion
@@ -96,6 +96,6 @@ namespace SampleDB.SqlTests
         //
         #endregion
 
-        private SqlDatabaseTestActions GetCouponDesignsData;
+        private SqlDatabaseTestActions GetADescriptionColumnsData;
     }
 }

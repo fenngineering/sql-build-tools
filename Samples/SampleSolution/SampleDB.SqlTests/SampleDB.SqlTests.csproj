@@ -56,7 +56,7 @@
     <Compile Include="dbo_ATable_Testing.cs">
       <SubType>Designer</SubType>
     </Compile>
-    <Compile Include="dbo_CheckDesign.cs">
+    <Compile Include="dbo_GetADescriptionColumns.cs">
       <SubType>Designer</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,8 +69,8 @@
     <EmbeddedResource Include="dbo_ATable_Testing.resx">
       <DependentUpon>dbo_ATable_Testing.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="dbo_CheckDesign.resx">
-      <DependentUpon>dbo_CheckDesign.cs</DependentUpon>
+    <EmbeddedResource Include="dbo_GetADescriptionColumns.resx">
+      <DependentUpon>dbo_GetADescriptionColumns.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

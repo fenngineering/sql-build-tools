@@ -7,7 +7,7 @@ using Microsoft.SqlServer.Server;
 public partial class StoredProcedures
 {
     [Microsoft.SqlServer.Server.SqlProcedure]
-    public static void GetCouponDesigns(string sqlCommand)
+    public static void GetADescriptionColumns(string sqlCommand)
     {
         using (SqlConnection connection = new SqlConnection("context connection=true"))
         {

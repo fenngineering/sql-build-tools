@@ -117,11 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GetCouponDesigns_TestAction.SqlScript" xml:space="preserve">
+  <data name="GetADescriptionColumns_TestAction.SqlScript" xml:space="preserve">
     <value>
 DECLARE @SQL = 'EXEC [dbo].[GetATable]'
 
-EXEC dbo.GetCouponDesigns @SQL
+EXEC dbo.GetADescriptionColumns @SQL
 
 </value>
   </data>
